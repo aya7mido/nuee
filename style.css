@@ -106,3 +106,124 @@ HERO
     display: block;
     object-fit: cover;
 }
+
+/* =========================
+BRAND STATEMENT
+========================= */
+
+.brand-statement {
+    padding: 160px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+}
+
+.statement-text {
+    width: 40%;
+}
+
+.statement-text h2 {
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.statement-text p {
+    margin-top: 40px;
+    font-size: 14px;
+    line-height: 2;
+}
+
+.statement-text a {
+    display: inline-block;
+    margin-top: 40px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.statement-image {
+    width: 45%;
+}
+
+.statement-image img {
+    width: 100%;
+    display: block;
+}
+
+/* =========================
+   COLLECTION
+========================= */
+
+.collection {
+    padding: 160px 40px;
+}
+
+.section-heading {
+    margin-bottom: 100px;
+}
+
+.section-heading h2 {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+}
+
+.section-heading p {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+
+/* collection item */
+
+.collection-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+    margin-bottom: 180px;
+}
+
+.collection-item:last-child {
+    margin-bottom: 0;
+}
+
+.collection-text {
+    width: 35%;
+}
+
+.collection-image {
+    width: 50%;
+}
+
+.collection-image img {
+    width: 100%;
+    display: block;
+}
+
+
+/* text */
+
+.collection-text .number {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+}
+
+.collection-text h3 {
+    margin-top: 8px;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+}
+
+.collection-text > p:not(.number):not(.notes) {
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+.collection-text .notes {
+    margin-top: 24px;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+}
