@@ -547,6 +547,19 @@ OBJECTS
     }
 }
 
+.scroll-indicator {
+    right: 10px;
+}
+
+.scroll-line {
+    height: 120px;
+}
+
+.scroll-dot {
+    width: 6px;
+    height: 6px;
+}
+
 /* =========================
 SCROLL ANIMATION
 ========================= */
@@ -562,4 +575,46 @@ SCROLL ANIMATION
 .collection-item.is-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* =========================
+   SCROLL INDICATOR
+========================= */
+
+.scroll-indicator {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.scroll-number {
+    font-size: 10px;
+    letter-spacing: 0.05em;
+}
+
+.scroll-line {
+    position: relative;
+    width: 1px;
+    height: 170px;
+    background-color: #523E32;
+}
+
+.scroll-dot {
+    position: absolute;
+    left: 50%;
+    top: 0;
+
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #523E32;
+
+    transform: translateX(-50%);
 }
