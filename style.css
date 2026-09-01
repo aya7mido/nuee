@@ -444,7 +444,7 @@ OBJECTS
     /* BRAND STATEMENT */
 
     .brand-statement {
-        padding: 100px 20px;
+        padding: 100px 36px;
         display: flex;
         flex-direction: column;
         align-items: stretch;
@@ -467,7 +467,7 @@ OBJECTS
     /* COLLECTION */
 
     .collection {
-        padding: 60px 20px 100px;
+        padding: 100px 36px;
     }
 
     .section-heading {
@@ -498,7 +498,7 @@ OBJECTS
     /* OBJECTS */
 
     .objects {
-        padding: 100px 20px;
+        padding: 100px 36px;
     }
 
     .objects-list {
@@ -516,7 +516,7 @@ OBJECTS
     .about {
         grid-template-columns: 1fr;
         gap: 60px;
-        padding: 100px 20px;
+        padding: 100px 36px;
     }
 
     .about-text {
@@ -531,7 +531,7 @@ OBJECTS
     /* CTA */
 
     .cta {
-        padding: 120px 20px;
+        padding: 120px 36px;
     }
 
     .cta h2 {
@@ -625,15 +625,13 @@ SCROLL ANIMATION
 
 @media (max-width: 768px) {
 
-    .scroll-indicator {
-        top: auto;
-        right: auto;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
+  .scroll-indicator {
+        top: 50%;
+        right: 15px;
+        bottom: auto;
+        left: auto;
 
-        background-color: rgba(241, 238, 231, 0.65);
-        padding: 5px 8px;
+        transform: translateY(-50%);
 
         flex-direction: column;
         align-items: center;
@@ -645,13 +643,13 @@ SCROLL ANIMATION
     }
 
     .scroll-dot {
-        top: 50%;
-        left: 0;
+        top: 0;
+        left: 50%;
 
         width: 6px;
         height: 6px;
 
-        transform: translateY(-50%);
+        transform: translateX(-50%);
     }
 
 }
