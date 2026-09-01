@@ -385,13 +385,10 @@ OBJECTS
 
 
 /* =========================
-   MOBILE
+★MOBILE
 ========================= */
 
 @media (max-width: 768px) {
-
-
-
     /* HEADER */
 
     .header {
@@ -416,7 +413,7 @@ OBJECTS
 
     .hero {
         min-height: auto;
-        padding: 40px 36px 80px;
+        padding: 40px 36px 80px 30px;
         display: flex;
         flex-direction: column;
         align-items: stretch;
@@ -620,12 +617,12 @@ SCROLL ANIMATION
 }
 
 /* =========================
-   MOBILE SCROLL INDICATOR
+★MOBILE SCROLL INDICATOR
 ========================= */
 
 @media (max-width: 768px) {
 
-  .scroll-indicator {
+.scroll-indicator {
         top: 50%;
         right: 10px;
         bottom: auto;
@@ -639,7 +636,7 @@ SCROLL ANIMATION
 
     .scroll-line {
         width: 1px;
-        height: 170px;
+        height: 80px;
     }
 
     .scroll-dot {

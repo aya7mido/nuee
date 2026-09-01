@@ -28,7 +28,7 @@ window.addEventListener("scroll", () => {
 
     const scrollProgress = scrollTop / scrollableHeight;
 
-const lineSize = 170;
+const lineSize = 80;
 
 scrollDot.style.transform =
     `translateX(-50%) translateY(${scrollProgress * lineSize}px)`;
