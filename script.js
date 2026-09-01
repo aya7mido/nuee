@@ -28,8 +28,6 @@ window.addEventListener("scroll", () => {
 
     const scrollProgress = scrollTop / scrollableHeight;
 
-    const lineHeight = 170;
-
 const lineSize = 170;
 
 if (window.innerWidth <= 768) {

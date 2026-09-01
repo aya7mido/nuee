@@ -558,45 +558,35 @@ OBJECTS
     padding: 100px 50px 100px 20px;
 }
 
-.scroll-indicator {
-    right: 10px;
-}
-
-.scroll-line {
-    height: 120px;
-}
-
-.scroll-dot {
-    width: 6px;
-    height: 6px;
-}
-
 /* SCROLL INDICATOR */
 
 .scroll-indicator {
     top: auto;
     right: auto;
-    bottom: 25px;
+    bottom: 30px;
     left: 50%;
+
     transform: translateX(-50%);
 
     flex-direction: row;
-    gap: 10px;
+    align-items: center;
 }
 
 .scroll-line {
+    position: relative;
     width: 170px;
     height: 1px;
 }
 
 .scroll-dot {
-    left: 0;
     top: 50%;
+    left: 0;
 
     width: 6px;
     height: 6px;
 
     transform: translateY(-50%);
+
 }
 
 }
