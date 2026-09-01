@@ -571,6 +571,34 @@ OBJECTS
     height: 6px;
 }
 
+/* SCROLL INDICATOR */
+
+.scroll-indicator {
+    top: auto;
+    right: auto;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    flex-direction: row;
+    gap: 10px;
+}
+
+.scroll-line {
+    width: 170px;
+    height: 1px;
+}
+
+.scroll-dot {
+    left: 0;
+    top: 50%;
+
+    width: 6px;
+    height: 6px;
+
+    transform: translateY(-50%);
+}
+
 }
 
 /* =========================

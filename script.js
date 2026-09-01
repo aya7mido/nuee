@@ -30,9 +30,19 @@ window.addEventListener("scroll", () => {
 
     const lineHeight = 170;
 
-    scrollDot.style.transform =
-        `translateX(-50%) translateY(${scrollProgress * lineHeight}px)`;
+const lineSize = 170;
 
+if (window.innerWidth <= 768) {
+
+    scrollDot.style.transform =
+        `translateY(-50%) translateX(${scrollProgress * lineSize}px)`;
+
+} else {
+
+    scrollDot.style.transform =
+        `translateX(-50%) translateY(${scrollProgress * lineSize}px)`;
+
+}
 });
 
 const sections = document.querySelectorAll("main > section");
