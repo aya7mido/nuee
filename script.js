@@ -30,18 +30,10 @@ window.addEventListener("scroll", () => {
 
 const lineSize = 170;
 
-if (window.innerWidth <= 768) {
-
-    scrollDot.style.transform =
-        `translateY(-50%) translateX(${scrollProgress * lineSize}px)`;
-
-} else {
-
-    scrollDot.style.transform =
-        `translateX(-50%) translateY(${scrollProgress * lineSize}px)`;
-
+scrollDot.style.transform =
+    `translateX(-50%) translateY(${scrollProgress * lineSize}px)`;
 }
-});
+);
 
 const sections = document.querySelectorAll("main > section");
 const scrollNumber = document.querySelector(".scroll-number-top");
