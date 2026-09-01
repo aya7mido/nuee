@@ -558,37 +558,6 @@ OBJECTS
     padding: 100px 50px 100px 20px;
 }
 
-/* SCROLL INDICATOR */
-
-.scroll-indicator {
-    top: auto;
-    right: auto;
-    bottom: 30px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    flex-direction: row;
-    align-items: center;
-}
-
-.scroll-line {
-    position: relative;
-    width: 170px;
-    height: 1px;
-}
-
-.scroll-dot {
-    top: 50%;
-    left: 0;
-
-    width: 6px;
-    height: 6px;
-
-    transform: translateY(-50%);
-
-}
-
 }
 
 /* =========================
@@ -648,4 +617,38 @@ SCROLL ANIMATION
     background-color: #523E32;
 
     transform: translateX(-50%);
+}
+
+/* =========================
+   MOBILE SCROLL INDICATOR
+========================= */
+
+@media (max-width: 768px) {
+
+    .scroll-indicator {
+        top: auto;
+        right: auto;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .scroll-line {
+        width: 170px;
+        height: 1px;
+    }
+
+    .scroll-dot {
+        top: 50%;
+        left: 0;
+
+        width: 6px;
+        height: 6px;
+
+        transform: translateY(-50%);
+    }
+
 }
