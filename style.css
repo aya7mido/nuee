@@ -374,6 +374,14 @@ OBJECTS
     opacity: 0.7;
 }
 
+/* =========================
+   STATEMENT
+========================= */
+
+.statement {
+    padding: 100px 80px 100px 100px;
+}
+
 
 
 /* =========================
@@ -545,6 +553,9 @@ OBJECTS
         flex-wrap: wrap;
         gap: 15px 25px;
     }
+
+.statement {
+    padding: 100px 50px 100px 20px;
 }
 
 .scroll-indicator {
@@ -558,6 +569,8 @@ OBJECTS
 .scroll-dot {
     width: 6px;
     height: 6px;
+}
+
 }
 
 /* =========================
