@@ -227,3 +227,138 @@ BRAND STATEMENT
     font-size: 11px;
     letter-spacing: 0.05em;
 }
+
+/* =========================
+OBJECTS
+========================= */
+
+.objects {
+    padding: 160px 40px;
+}
+
+.objects-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.object-item img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+}
+
+.object-item h3 {
+    margin-top: 24px;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+}
+
+.object-item span {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+}
+
+/* =========================
+   ABOUT
+========================= */
+
+.about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 100px;
+    padding: 180px 40px;
+}
+
+.about-image img {
+    width: 100%;
+    display: block;
+}
+
+.about-text {
+    max-width: 480px;
+}
+
+.about-text .small-title {
+    margin-bottom: 40px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+}
+
+.about-text h2 {
+    margin-bottom: 40px;
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.about-text p {
+    margin-bottom: 40px;
+    line-height: 2;
+}
+
+.about-text a {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+/* =========================
+   CTA
+========================= */
+
+.cta {
+    padding: 180px 40px;
+    text-align: center;
+}
+
+.cta h2 {
+    margin-bottom: 30px;
+    font-size: 42px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+.cta a {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    padding: 50px 40px 30px;
+    background-color: #523E32;
+    color: #F4F1EA;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-logo {
+    font-family: Georgia, serif;
+    font-size: 28px;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 28px;
+}
+
+.footer-nav a {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+}
+
+.copyright {
+    font-size: 9px;
+    opacity: 0.7;
+}
