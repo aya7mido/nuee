@@ -78,6 +78,12 @@ HERO
     align-items: center;
     justify-content: space-between;
     gap: 60px;
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+
+.hero.is-visible {
+    opacity: 1;
 }
 
 .hero-text {
@@ -117,6 +123,16 @@ BRAND STATEMENT
     align-items: center;
     justify-content: space-between;
     gap: 80px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.brand-statement.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .statement-text {
@@ -156,7 +172,7 @@ BRAND STATEMENT
 ========================= */
 
 .collection {
-    padding: 160px 80px 160px 80px;
+    padding: 160px 80px 250px 80px;
 }
 
 .section-heading {
@@ -183,6 +199,16 @@ BRAND STATEMENT
     justify-content: space-between;
     gap: 80px;
     margin-bottom: 180px;
+        opacity: 0;
+    transform: translateY(30px);
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.collection-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .collection-item:last-child {
@@ -228,6 +254,9 @@ BRAND STATEMENT
     letter-spacing: 0.05em;
 }
 
+.collection-item:nth-child(even) {
+    flex-direction: row-reverse;
+}
 
 
 /* =========================
@@ -235,7 +264,15 @@ OBJECTS
 ========================= */
 
 .objects {
-    padding: 160px 80px 160px 80px;
+    padding: 160px 80px 180px 80px;
+    background-color: #523E32;
+    color: #F1EEE7;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.objects.is-visible {
+    opacity: 1;
 }
 
 .objects-list {
@@ -325,6 +362,12 @@ OBJECTS
 .cta {
     padding: 180px 80px;
     text-align: center;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.cta.is-visible {
+    opacity: 1;
 }
 
 .cta h2 {
@@ -379,7 +422,17 @@ OBJECTS
 ========================= */
 
 .statement {
-    padding: 100px 80px 100px 100px;
+    padding: 180px 80px 50px 100px;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition:
+        opacity 1s ease,
+        transform 1s ease;
+}
+
+.statement.is-visible {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 
@@ -441,7 +494,7 @@ OBJECTS
     /* BRAND STATEMENT */
 
     .brand-statement {
-        padding: 100px 36px;
+        padding: 100px 36px 100px 30px;
         display: flex;
         flex-direction: column;
         align-items: stretch;
@@ -495,7 +548,7 @@ OBJECTS
     /* OBJECTS */
 
     .objects {
-        padding: 100px 36px;
+        padding: 100px 36px 100px 30px;
     }
 
     .objects-list {
@@ -513,7 +566,7 @@ OBJECTS
     .about {
         grid-template-columns: 1fr;
         gap: 60px;
-        padding: 100px 36px;
+        padding: 100px 36px 100px 30px;
     }
 
     .about-text {
@@ -528,33 +581,31 @@ OBJECTS
     /* CTA */
 
     .cta {
-        padding: 120px 36px;
-    }
+        padding: 120px 36px 120px 30px;
+}
 
-    .cta h2 {
-        font-size: 32px;
-    }
+.cta h2 {
+    font-size: 32px;
+}
 
 
-    /* FOOTER */
+/* FOOTER */
 
-    .footer {
-        padding: 40px 20px 25px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 30px;
-    }
+.footer {
+    padding: 40px 20px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+}
 
-    .footer-nav {
-        flex-wrap: wrap;
-        gap: 15px 25px;
-    }
+.footer-nav {
+    flex-wrap: wrap;
+    gap: 15px 25px;
+}
 
-    .statement {
-        padding: 100px 50px 100px 20px;
-    }
-
+.statement {
+    padding: 150px 50px 100px 30px;
 }
 
 /* =========================
@@ -622,7 +673,7 @@ SCROLL ANIMATION
 
 @media (max-width: 768px) {
 
-.scroll-indicator {
+    .scroll-indicator {
         top: 50%;
         right: 10px;
         bottom: auto;
@@ -649,4 +700,4 @@ SCROLL ANIMATION
         transform: translateX(-50%);
     }
 
-}
+}}

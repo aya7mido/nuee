@@ -1,4 +1,6 @@
-const collectionItems = document.querySelectorAll(".collection-item");
+const animatedItems = document.querySelectorAll(
+    ".collection-item, .brand-statement, .statement,.objects,.cta"
+);
 
 const observer = new IntersectionObserver((entries) => {
 
@@ -6,17 +8,22 @@ const observer = new IntersectionObserver((entries) => {
 
         if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
+        } else {
+            entry.target.classList.remove("is-visible");
         }
 
     });
 
 });
 
-collectionItems.forEach((item) => {
+animatedItems.forEach((item) => {
     observer.observe(item);
 });
 
 const scrollDot = document.querySelector(".scroll-dot");
+const scrollLine = document.querySelector(".scroll-line");
+const objectsSection = document.querySelector(".objects");
+const scrollNumbers = document.querySelectorAll(".scroll-number");
 
 window.addEventListener("scroll", () => {
 
@@ -32,6 +39,26 @@ const lineSize = 80;
 
 scrollDot.style.transform =
     `translateX(-50%) translateY(${scrollProgress * lineSize}px)`;
+
+const objectsRect = objectsSection.getBoundingClientRect();
+
+if (
+    objectsRect.top <= window.innerHeight / 2 &&
+    objectsRect.bottom >= window.innerHeight / 2
+) {
+    scrollLine.style.backgroundColor = "#F1EEE7";
+    scrollDot.style.backgroundColor = "#F1EEE7";
+    scrollNumbers.forEach((number) => {
+    number.style.color = "#F1EEE7";
+});
+} else {
+    scrollLine.style.backgroundColor = "#523E32";
+    scrollDot.style.backgroundColor = "#523E32";
+    scrollNumbers.forEach((number) => {
+    number.style.color = "#523E32";
+});
+}
+
 }
 );
 
@@ -56,4 +83,8 @@ window.addEventListener("scroll", () => {
     scrollNumber.textContent =
         String(currentSection).padStart(2, "0");
 
+});
+
+window.addEventListener("load", () => {
+    document.querySelector(".hero").classList.add("is-visible");
 });
