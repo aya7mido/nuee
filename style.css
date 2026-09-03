@@ -103,14 +103,20 @@ HERO
     letter-spacing: 0.05em;
 }
 
-.hero-image {
+.hero-image img {
     width: 55%;
+    display: block;
 }
 
-.hero-image img {
-    width: 100%;
+.hero-image {
+    overflow: hidden;
+}
+
+.hero-image video {
+    width: 90%;
     display: block;
     object-fit: cover;
+    margin-left: auto;
 }
 
 /* =========================
@@ -199,7 +205,7 @@ BRAND STATEMENT
     justify-content: space-between;
     gap: 80px;
     margin-bottom: 180px;
-        opacity: 0;
+    opacity: 0;
     transform: translateY(30px);
     transition:
         opacity 1s ease,
@@ -328,6 +334,11 @@ OBJECTS
     display: block;
 }
 
+.about-image {
+    position: relative;
+    z-index: 2;
+}
+
 .about-text {
     max-width: 480px;
 }
@@ -355,6 +366,53 @@ OBJECTS
     letter-spacing: 0.08em;
 }
 
+.about {
+    position: relative;
+    overflow: hidden;
+}
+
+.about-wave {
+    position: absolute;
+    left: 0%;
+    bottom: 350px;
+    width: 100%;
+    height: 70px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.about-wave svg {
+    width: 200%;
+    height: 100%;
+    animation: waveMove 30s linear infinite;
+}
+
+.about-wave path {
+    fill: none;
+    stroke: #C8B08D;
+    opacity: 0.5;
+    stroke-width: 2;
+}
+
+.about {
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.about.is-visible {
+    opacity: 1;
+}
+
+@keyframes waveMove {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 /* =========================
    CTA
 ========================= */
@@ -363,7 +421,7 @@ OBJECTS
     padding: 180px 80px;
     text-align: center;
     opacity: 0;
-    transition: opacity 1.5s ease;
+    transition: opacity 3s ease;
 }
 
 .cta.is-visible {
@@ -582,30 +640,31 @@ OBJECTS
 
     .cta {
         padding: 120px 36px 120px 30px;
-}
+    }
 
-.cta h2 {
-    font-size: 32px;
-}
+    .cta h2 {
+        font-size: 32px;
+    }
 
 
-/* FOOTER */
+    /* FOOTER */
 
-.footer {
-    padding: 40px 20px 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 30px;
-}
+    .footer {
+        padding: 40px 20px 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+    }
 
-.footer-nav {
-    flex-wrap: wrap;
-    gap: 15px 25px;
-}
+    .footer-nav {
+        flex-wrap: wrap;
+        gap: 15px 25px;
+    }
 
-.statement {
-    padding: 150px 50px 100px 30px;
+    .statement {
+        padding: 150px 50px 100px 30px;
+    }
 }
 
 /* =========================
@@ -700,4 +759,4 @@ SCROLL ANIMATION
         transform: translateX(-50%);
     }
 
-}}
+}

@@ -2,6 +2,26 @@ const animatedItems = document.querySelectorAll(
     ".collection-item, .brand-statement, .statement,.objects,.cta"
 );
 
+const about = document.querySelector(".about");
+
+const aboutObserver = new IntersectionObserver((entries) => {
+
+    entries.forEach((entry) => {
+
+        if (entry.isIntersecting) {
+            about.classList.add("is-visible");
+        } else {
+            about.classList.remove("is-visible");
+        }
+
+    });
+
+}, {
+    rootMargin: "0px"
+});
+
+aboutObserver.observe(about);
+
 const observer = new IntersectionObserver((entries) => {
 
     entries.forEach((entry) => {
@@ -14,7 +34,8 @@ const observer = new IntersectionObserver((entries) => {
 
     });
 
-});
+}, {
+rootMargin: "0px 0px 20% 0px"});
 
 animatedItems.forEach((item) => {
     observer.observe(item);
@@ -35,11 +56,16 @@ window.addEventListener("scroll", () => {
 
     const scrollProgress = scrollTop / scrollableHeight;
 
-const lineSize = 80;
+let lineSize;
+
+if (window.innerWidth <= 768) {
+    lineSize = 74;
+} else {
+    lineSize = 163;
+}
 
 scrollDot.style.transform =
     `translateX(-50%) translateY(${scrollProgress * lineSize}px)`;
-
 const objectsRect = objectsSection.getBoundingClientRect();
 
 if (
