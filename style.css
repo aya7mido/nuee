@@ -124,6 +124,7 @@ BRAND STATEMENT
 ========================= */
 
 .brand-statement {
+    position: relative;
     padding: 160px 80px 160px 80px;
     display: flex;
     align-items: center;
@@ -172,6 +173,28 @@ BRAND STATEMENT
     width: 100%;
     display: block;
 }
+
+.statement-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0.5px;
+    height: 40px;
+    background-color: #523E32;
+
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+    transition: transform 1.5s ease;
+}
+
+.brand-statement.is-visible .statement-line {
+    transform: scaleY(1);
+}
+
+.brand-statement.is-visible .statement-line {
+    transform: translateX(-50%) scaleY(1);
+}
+
 
 /* =========================
    COLLECTION
@@ -389,7 +412,7 @@ OBJECTS
 
 .about-wave path {
     fill: none;
-    stroke: #C8B08D;
+    stroke: #523E32;
     opacity: 0.5;
     stroke-width: 2;
 }
