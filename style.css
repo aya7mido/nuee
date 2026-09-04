@@ -8,6 +8,102 @@ RESET
     box-sizing: border-box;
 }
 
+/* =========================
+loading
+========================= */
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #523E32;
+    color: #F1EEE7;
+
+    transition: opacity 1s ease;
+}
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #523E32;
+    color: #F1EEE7;
+
+    transition: opacity 1s ease;
+}
+
+.loading-screen p {
+    font-size: 20px;
+    letter-spacing: 0.5em;
+}
+
+.loading-text span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-5px);
+    animation: letterAppear 0.6s ease forwards;
+}
+
+.loading-text span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.loading-text span:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.loading-text span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.loading-text span:nth-child(4) {
+    animation-delay: 0.45s;
+}
+
+.loading-text span:nth-child(5) {
+    animation-delay: 0.6s;
+}
+
+.loading-text span:nth-child(6) {
+    animation-delay: 0.75s;
+}
+
+.loading-text span:nth-child(7) {
+    animation-delay: 0.9s;
+}
+
+@keyframes letterAppear {
+    from {
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.loading-screen.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-screen.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
 
 /* =========================
 BASE
