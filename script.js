@@ -1,15 +1,6 @@
 const loadingScreen = document.querySelector(".loading-screen");
 const heroVideo = document.querySelector(".hero-image video");
 
-heroVideo.addEventListener("canplay", () => {
-
-    setTimeout(() => {
-        loadingScreen.classList.add("is-hidden");
-        document.querySelector(".hero").classList.add("is-visible");
-    }, 1500);
-
-});
-
 const animatedItems = document.querySelectorAll(
     ".collection-item, .brand-statement, .statement,.objects,.cta"
 );
@@ -120,9 +111,13 @@ window.addEventListener("scroll", () => {
 
     scrollNumber.textContent =
         String(currentSection).padStart(2, "0");
-
 });
 
 window.addEventListener("load", () => {
-    document.querySelector(".hero").classList.add("is-visible");
+
+    setTimeout(() => {
+        loadingScreen.classList.add("is-hidden");
+        document.querySelector(".hero").classList.add("is-visible");
+    }, 1500);
+
 });

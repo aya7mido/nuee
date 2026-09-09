@@ -11,7 +11,6 @@ RESET
 /* =========================
 loading
 ========================= */
-
 .loading-screen {
     position: fixed;
     inset: 0;
@@ -27,21 +26,10 @@ loading
     transition: opacity 1s ease;
 }
 
-.loading-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background-color: #523E32;
-    color: #F1EEE7;
-
-    transition: opacity 1s ease;
+.loading-screen.is-hidden {
+    opacity: 0;
+    pointer-events: none;
 }
-
 .loading-screen p {
     font-size: 20px;
     letter-spacing: 0.5em;
@@ -268,10 +256,6 @@ BRAND STATEMENT
     transform: translateX(-50%) scaleY(0);
     transform-origin: top;
     transition: transform 1.5s ease;
-}
-
-.brand-statement.is-visible .statement-line {
-    transform: scaleY(1);
 }
 
 .brand-statement.is-visible .statement-line {
