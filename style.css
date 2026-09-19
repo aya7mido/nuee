@@ -1,4 +1,30 @@
 /* =========================
+TOKENS
+========================= */
+
+:root {
+    /* color */
+    --brown: #523E32;
+    --cream: #F1EEE7;
+
+    /* font */
+    --font-en: "Cormorant Garamond", Georgia, serif;
+    --font-jp: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
+
+    /* layout
+       --pad-x : 画面が広いときは中身を最大 1280px に収め、左右の余白を自動で増やす */
+    --content-max: 1280px;
+    --gutter: clamp(32px, 5.5vw, 80px);
+    --pad-x: max(var(--gutter), calc((100% - var(--content-max)) / 2));
+    --section-y: clamp(100px, 12vw, 180px);
+    --header-h: 80px;
+
+    /* motion */
+    --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+
+/* =========================
 RESET
 ========================= */
 
@@ -8,9 +34,84 @@ RESET
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--header-h);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+::selection {
+    background-color: var(--brown);
+    color: var(--cream);
+}
+
+
 /* =========================
-loading
+BASE
 ========================= */
+
+body {
+    background-color: var(--cream);
+    color: var(--brown);
+    font-family: var(--font-en), var(--font-jp);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: 0.04em;
+    font-variant-numeric: lining-nums;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+
+/* =========================
+LINK
+========================= */
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* テキストリンク：ホバーで下線が左から伸びる */
+.nav a,
+.footer-nav a,
+.statement-text a,
+.about-text a,
+.cta a,
+.object-item span {
+    display: inline-block;
+    padding-bottom: 3px;
+    background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+    transition: background-size 0.5s var(--ease);
+}
+
+.nav a:hover,
+.footer-nav a:hover,
+.statement-text a:hover,
+.about-text a:hover,
+.cta a:hover,
+.object-item a:hover span {
+    background-size: 100% 1px;
+}
+
+/* キーボード操作時のフォーカス */
+a:focus-visible,
+button:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 6px;
+}
+
+
+/* =========================
+LOADING
+========================= */
+
 .loading-screen {
     position: fixed;
     inset: 0;
@@ -20,18 +121,24 @@ loading
     justify-content: center;
     align-items: center;
 
-    background-color: #523E32;
-    color: #F1EEE7;
+    background-color: var(--brown);
+    color: var(--cream);
 
-    transition: opacity 1s ease;
+    transition: opacity 1s var(--ease);
 }
 
 .loading-screen.is-hidden {
     opacity: 0;
     pointer-events: none;
 }
+
+/* 同じタブの2回目以降は表示しない */
+.is-seen .loading-screen {
+    display: none;
+}
+
 .loading-screen p {
-    font-size: 20px;
+    font-size: 28px;
     letter-spacing: 0.5em;
 }
 
@@ -80,52 +187,53 @@ loading
     }
 }
 
-/* =========================
-BASE
-========================= */
-
-body {
-    background-color: #F1EEE7;
-    color: #523E32;
-    font-family: Georgia, "Times New Roman", serif;
-    line-height: 1.6;
-}
-
-
-/* =========================
-LINK
-========================= */
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
 
 /* =========================
 HEADER
 ========================= */
 
 .header {
-    height: 80px;
-    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    height: var(--header-h);
+    padding: 0 var(--pad-x);
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    background-color: rgba(241, 238, 231, 0.92);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+
+    transition: transform 0.6s var(--ease);
+}
+
+/* 下にスクロールで隠れ、上にスクロールで戻る */
+.header.is-hidden {
+    transform: translateY(-100%);
+}
+
+.header:focus-within {
+    transform: none;
 }
 
 .logo {
-    font-size: 24px;
-    letter-spacing: 0.05em;
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
 }
 
 .nav {
     display: flex;
-    gap: 40px;
+    gap: 44px;
 }
 
 .nav a {
-    font-size: 11px;
-    letter-spacing: 0.08em;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
 }
 
 .menu-button {
@@ -133,24 +241,27 @@ HEADER
     background: none;
     color: inherit;
     font-family: inherit;
-    font-size: 11px;
-    letter-spacing: 0.08em;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
     cursor: pointer;
 }
+
 
 /* =========================
 HERO
 ========================= */
 
 .hero {
-    min-height: calc(100vh - 80px);
-    padding: 60px 80px 100px 80px;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100svh - var(--header-h));
+    padding: 40px var(--pad-x) 100px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 60px;
     opacity: 0;
-    transition: opacity 2s ease;
+    transition: opacity 2s var(--ease);
 }
 
 .hero.is-visible {
@@ -162,33 +273,34 @@ HERO
 }
 
 .hero-text h1 {
-    font-size: clamp(60px, 8vw, 120px);
-    font-weight: 400;
+    font-size: clamp(64px, 9vw, 136px);
+    font-weight: 500;
     line-height: 0.9;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
 }
 
 .hero-text p {
-    margin-top: 30px;
-    font-size: 14px;
-    letter-spacing: 0.05em;
-}
-
-.hero-image img {
-    width: 55%;
-    display: block;
+    margin-top: 32px;
+    font-size: 18px;
+    line-height: 1.7;
+    letter-spacing: 0.06em;
 }
 
 .hero-image {
     overflow: hidden;
 }
 
+/* 最初の1画面に、動画（商品）が収まる高さにする */
 .hero-image video {
-    width: 90%;
     display: block;
-    object-fit: cover;
     margin-left: auto;
+    width: auto;
+    height: max(420px, min(calc(100vh - 200px), 760px));
+    height: max(420px, min(calc(100svh - 200px), 760px));
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
 }
+
 
 /* =========================
 BRAND STATEMENT
@@ -196,7 +308,7 @@ BRAND STATEMENT
 
 .brand-statement {
     position: relative;
-    padding: 160px 80px 160px 80px;
+    padding: var(--section-y) var(--pad-x);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -204,8 +316,8 @@ BRAND STATEMENT
     opacity: 0;
     transform: translateY(30px);
     transition:
-        opacity 1s ease,
-        transform 1s ease;
+        opacity 1s var(--ease),
+        transform 1s var(--ease);
 }
 
 .brand-statement.is-visible {
@@ -218,22 +330,24 @@ BRAND STATEMENT
 }
 
 .statement-text h2 {
-    font-size: 56px;
-    font-weight: 400;
-    line-height: 1;
+    font-size: clamp(48px, 5.2vw, 76px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: 0;
 }
 
 .statement-text p {
     margin-top: 40px;
-    font-size: 14px;
-    line-height: 2;
+    font-size: 15px;
+    line-height: 2.1;
+    letter-spacing: 0.08em;
 }
 
 .statement-text a {
-    display: inline-block;
-    margin-top: 40px;
-    font-size: 11px;
-    letter-spacing: 0.08em;
+    margin-top: 32px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
 }
 
 .statement-image {
@@ -242,20 +356,19 @@ BRAND STATEMENT
 
 .statement-image img {
     width: 100%;
-    display: block;
 }
 
 .statement-line {
     position: absolute;
     top: 0;
     left: 50%;
-    width: 0.5px;
+    width: 1px;
     height: 40px;
-    background-color: #523E32;
+    background-color: var(--brown);
 
     transform: translateX(-50%) scaleY(0);
     transform-origin: top;
-    transition: transform 1.5s ease;
+    transition: transform 1.5s var(--ease);
 }
 
 .brand-statement.is-visible .statement-line {
@@ -264,42 +377,47 @@ BRAND STATEMENT
 
 
 /* =========================
-   COLLECTION
+SECTION HEADING
 ========================= */
 
-.collection {
-    padding: 160px 80px 250px 80px;
-}
-
 .section-heading {
-    margin-bottom: 100px;
+    margin-bottom: calc(var(--section-y) * 0.55);
 }
 
 .section-heading h2 {
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.1em;
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 00;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
 }
 
 .section-heading p {
-    margin-top: 8px;
-    font-size: 12px;
+    margin-top: 12px;
+    font-size: 17px;
+    font-style: italic;
+    letter-spacing: 0.06em;
 }
 
 
-/* collection item */
+/* =========================
+COLLECTION
+========================= */
+
+.collection {
+    padding: var(--section-y) var(--pad-x) calc(var(--section-y) * 1.4);
+}
 
 .collection-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 80px;
-    margin-bottom: 180px;
+    gap: 60px;
+    margin-bottom: var(--section-y);
     opacity: 0;
     transform: translateY(30px);
     transition:
-        opacity 1s ease,
-        transform 1s ease;
+        opacity 1s var(--ease),
+        transform 1s var(--ease);
 }
 
 .collection-item.is-visible {
@@ -312,46 +430,59 @@ BRAND STATEMENT
 }
 
 .collection-text {
-    width: 35%;
+    width: 30%;
 }
 
 .collection-image {
-    width: 50%;
+    width: 46%;
 }
 
+/* 1画面に収まるよう高さを制限（はみ出す分は左右をわずかにトリミング） */
 .collection-image img {
     width: 100%;
-    display: block;
+    aspect-ratio: 4 / 5;
+    max-height: 85vh;
+    max-height: 85svh;
+    object-fit: cover;
 }
-
 
 /* text */
 
 .collection-text .number {
-    font-size: 12px;
-    letter-spacing: 0.08em;
+    font-size: 15px;
+    letter-spacing: 0.12em;
 }
 
 .collection-text h3 {
     margin-top: 8px;
-    font-size: 32px;
-    font-weight: 400;
-    letter-spacing: 0.03em;
+    font-size: clamp(34px, 3.4vw, 48px);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: 0.08em;
 }
 
 .collection-text>p:not(.number):not(.notes) {
-    margin-top: 12px;
-    font-size: 13px;
+    margin-top: 14px;
+    font-size: 15px;
+    letter-spacing: 0.08em;
 }
 
 .collection-text .notes {
-    margin-top: 24px;
-    font-size: 11px;
-    letter-spacing: 0.05em;
+    margin-top: 28px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
 }
 
-.collection-item:nth-child(even) {
-    flex-direction: row-reverse;
+/* デスクトップのみ：左右交互＋画像の幅に緩急をつける */
+@media (min-width: 769px) {
+    .collection-item:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
+    .collection-item:nth-child(even) .collection-image {
+        width: 38%;
+    }
 }
 
 
@@ -360,11 +491,11 @@ OBJECTS
 ========================= */
 
 .objects {
-    padding: 160px 80px 180px 80px;
-    background-color: #523E32;
-    color: #F1EEE7;
+    padding: var(--section-y) var(--pad-x);
+    background-color: var(--brown);
+    color: var(--cream);
     opacity: 0;
-    transition: opacity 1.5s ease;
+    transition: opacity 1.5s var(--ease);
 }
 
 .objects.is-visible {
@@ -381,52 +512,93 @@ OBJECTS
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
-    display: block;
-}
-
-.object-item h3 {
-    margin-top: 24px;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-}
-
-.object-item span {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-}
-
-.object-item img {
-    transition: transform 1s ease;
+    transition: transform 1s var(--ease);
 }
 
 .object-item a:hover img {
     transform: scale(1.01);
 }
 
+.object-item h3 {
+    margin-top: 24px;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+}
+
+.object-item span {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+}
+
 
 /* =========================
-   ABOUT
+STATEMENT
+========================= */
+
+.statement {
+    padding: var(--section-y) var(--pad-x) calc(var(--section-y) * 0.3);
+    opacity: 0;
+    transform: translateX(-30px);
+    transition:
+        opacity 1s var(--ease),
+        transform 1s var(--ease);
+}
+
+.statement.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.statement-jp {
+    font-size: clamp(22px, 2.6vw, 36px);
+    font-weight: 400;
+    line-height: 2;
+    letter-spacing: 0.1em;
+}
+
+.statement-en {
+    margin-top: 40px;
+    font-size: clamp(19px, 1.9vw, 27px);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
+}
+
+.statement-brand {
+    margin-top: 40px;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+}
+
+
+/* =========================
+ABOUT
 ========================= */
 
 .about {
+    position: relative;
+    overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    gap: 100px;
-    padding: 180px 80px 180px 80px;
+    column-gap: 100px;
+    row-gap: 60px;
+    padding: calc(var(--section-y) * 0.4) var(--pad-x) var(--section-y);
+    opacity: 0;
+    transition: opacity 1.5s var(--ease);
+}
+
+.about.is-visible {
+    opacity: 1;
 }
 
 .about-image img {
     width: 100%;
-    display: block;
-}
-
-.about-image {
-    position: relative;
-    z-index: 2;
 }
 
 .about-text {
@@ -435,40 +607,40 @@ OBJECTS
 
 .about-text .small-title {
     margin-bottom: 40px;
-    font-size: 12px;
-    letter-spacing: 0.1em;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
 }
 
 .about-text h2 {
     margin-bottom: 40px;
-    font-size: 42px;
-    font-weight: 400;
+    font-size: clamp(34px, 3.6vw, 52px);
+    font-weight: 300;
     line-height: 1.2;
+    letter-spacing: 0.01em;
 }
 
-.about-text p {
+.about-text p:not(.small-title) {
     margin-bottom: 40px;
-    line-height: 2;
-}
-
-.about-text a {
-    font-size: 11px;
+    font-size: 15px;
+    line-height: 2.1;
     letter-spacing: 0.08em;
 }
 
-.about {
-    position: relative;
-    overflow: hidden;
+.about-text a {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
 }
 
+/* 波線：セクション上部の区切りとして、通常の流れの中に置く（画面幅いっぱいに広げる） */
 .about-wave {
-    position: absolute;
-    left: 0%;
-    bottom: 350px;
-    width: 100%;
+    grid-column: 1 / -1;
+    order: -1;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
     height: 70px;
     overflow: hidden;
-    z-index: 1;
 }
 
 .about-wave svg {
@@ -479,18 +651,9 @@ OBJECTS
 
 .about-wave path {
     fill: none;
-    stroke: #523E32;
+    stroke: var(--brown);
     opacity: 0.5;
     stroke-width: 2;
-}
-
-.about {
-    opacity: 0;
-    transition: opacity 1.5s ease;
-}
-
-.about.is-visible {
-    opacity: 1;
 }
 
 @keyframes waveMove {
@@ -503,15 +666,16 @@ OBJECTS
     }
 }
 
+
 /* =========================
-   CTA
+CTA
 ========================= */
 
 .cta {
-    padding: 180px 80px;
+    padding: var(--section-y) var(--pad-x);
     text-align: center;
     opacity: 0;
-    transition: opacity 3s ease;
+    transition: opacity 3s var(--ease);
 }
 
 .cta.is-visible {
@@ -519,25 +683,27 @@ OBJECTS
 }
 
 .cta h2 {
-    margin-bottom: 30px;
-    font-size: 42px;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-}
-
-.cta a {
-    font-size: 11px;
+    margin-bottom: 32px;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 500;
     letter-spacing: 0.08em;
 }
 
+.cta a {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+}
+
+
 /* =========================
-   FOOTER
+FOOTER
 ========================= */
 
 .footer {
-    padding: 50px 40px 30px;
-    background-color: #523E32;
-    color: #F4F1EA;
+    padding: 50px var(--pad-x) 30px;
+    background-color: var(--brown);
+    color: var(--cream);
 
     display: flex;
     align-items: flex-end;
@@ -546,236 +712,29 @@ OBJECTS
 }
 
 .footer-logo {
-    font-family: Georgia, serif;
-    font-size: 28px;
+    font-size: 34px;
+    line-height: 1.2;
 }
 
 .footer-nav {
     display: flex;
-    gap: 28px;
+    gap: 32px;
 }
 
 .footer-nav a {
-    font-size: 10px;
-    letter-spacing: 0.08em;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
 }
 
 .copyright {
-    font-size: 9px;
-    opacity: 0.7;
+    font-size: 13px;
+    opacity: 0.75;
 }
-
-/* =========================
-   STATEMENT
-========================= */
-
-.statement {
-    padding: 180px 80px 50px 100px;
-    opacity: 0;
-    transform: translateX(-30px);
-    transition:
-        opacity 1s ease,
-        transform 1s ease;
-}
-
-.statement.is-visible {
-    opacity: 1;
-    transform: translateX(0);
-}
-
 
 
 /* =========================
-★MOBILE
-========================= */
-
-@media (max-width: 768px) {
-    /* HEADER */
-
-    .header {
-        height: 70px;
-        padding: 0 20px;
-    }
-
-    .logo {
-        font-size: 22px;
-    }
-
-    .nav {
-        display: none;
-    }
-
-    .menu-button {
-        font-size: 10px;
-    }
-
-
-    /* HERO */
-
-    .hero {
-        min-height: auto;
-        padding: 40px 36px 80px 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 50px;
-    }
-
-    .hero-text {
-        width: 100%;
-    }
-
-    .hero-text h1 {
-        font-size: clamp(60px, 20vw, 90px);
-    }
-
-    .hero-text p {
-        margin-top: 20px;
-        font-size: 13px;
-    }
-
-    .hero-image {
-        width: 100%;
-    }
-
-
-    /* BRAND STATEMENT */
-
-    .brand-statement {
-        padding: 100px 36px 100px 30px;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 60px;
-    }
-
-    .statement-text {
-        width: 100%;
-    }
-
-    .statement-text h2 {
-        font-size: 42px;
-    }
-
-    .statement-image {
-        width: 100%;
-    }
-
-
-    /* COLLECTION */
-
-    .collection {
-        padding: 100px 36px;
-    }
-
-    .section-heading {
-        margin-bottom: 60px;
-    }
-
-    .collection-item {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 40px;
-        margin-bottom: 100px;
-    }
-
-    .collection-text {
-        width: 100%;
-    }
-
-    .collection-image {
-        width: 100%;
-    }
-
-    .collection-text h3 {
-        font-size: 28px;
-    }
-
-
-    /* OBJECTS */
-
-    .objects {
-        padding: 100px 36px 100px 30px;
-    }
-
-    .objects-list {
-        grid-template-columns: 1fr;
-        gap: 70px;
-    }
-
-    .object-item h3 {
-        margin-top: 20px;
-    }
-
-
-    /* ABOUT */
-
-    .about {
-        grid-template-columns: 1fr;
-        gap: 60px;
-        padding: 100px 36px 100px 30px;
-    }
-
-    .about-text {
-        max-width: none;
-    }
-
-    .about-text h2 {
-        font-size: 36px;
-    }
-
-
-    /* CTA */
-
-    .cta {
-        padding: 120px 36px 120px 30px;
-    }
-
-    .cta h2 {
-        font-size: 32px;
-    }
-
-
-    /* FOOTER */
-
-    .footer {
-        padding: 40px 20px 25px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 30px;
-    }
-
-    .footer-nav {
-        flex-wrap: wrap;
-        gap: 15px 25px;
-    }
-
-    .statement {
-        padding: 150px 50px 100px 30px;
-    }
-}
-
-/* =========================
-SCROLL ANIMATION
-========================= */
-
-.collection-item {
-    opacity: 0;
-    transform: translateY(30px);
-    transition:
-        opacity 1s ease,
-        transform 1s ease;
-}
-
-.collection-item.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* =========================
-   SCROLL INDICATOR
+SCROLL INDICATOR
 ========================= */
 
 .scroll-indicator {
@@ -789,10 +748,19 @@ SCROLL ANIMATION
     flex-direction: column;
     align-items: center;
     gap: 10px;
+
+    color: var(--brown);
+    transition: color 0.4s var(--ease);
+}
+
+/* 暗い背景のセクション上では明るい色に */
+.scroll-indicator.is-light {
+    color: var(--cream);
 }
 
 .scroll-number {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: 500;
     letter-spacing: 0.05em;
 }
 
@@ -800,7 +768,7 @@ SCROLL ANIMATION
     position: relative;
     width: 1px;
     height: 170px;
-    background-color: #523E32;
+    background-color: currentColor;
 }
 
 .scroll-dot {
@@ -811,42 +779,165 @@ SCROLL ANIMATION
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background-color: #523E32;
+    background-color: currentColor;
 
     transform: translateX(-50%);
 }
 
+
 /* =========================
-★MOBILE SCROLL INDICATOR
+MOBILE
 ========================= */
 
 @media (max-width: 768px) {
 
-    .scroll-indicator {
-        top: 50%;
-        right: 10px;
-        bottom: auto;
-        left: auto;
+    :root {
+        --header-h: 70px;
+    }
 
-        transform: translateY(-50%);
+    /* HEADER */
 
+    .logo {
+        font-size: 28px;
+    }
+
+    .nav {
+        display: none;
+    }
+
+    /* HERO */
+
+    .hero {
+        min-height: auto;
+        padding: 40px var(--pad-x) 80px;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
+        gap: 50px;
+    }
+
+    .hero-text {
+        width: 100%;
+    }
+
+    .hero-text h1 {
+        font-size: clamp(64px, 22vw, 100px);
+    }
+
+    .hero-text p {
+        margin-top: 20px;
+        font-size: 17px;
+    }
+
+    .hero-image {
+        width: 100%;
+    }
+
+    .hero-image video {
+        width: 90%;
+        height: auto;
+    }
+
+    /* BRAND STATEMENT */
+
+    .brand-statement {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 60px;
+    }
+
+    .statement-text,
+    .statement-image {
+        width: 100%;
+    }
+
+    /* COLLECTION */
+
+    .collection-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 40px;
+    }
+
+    .collection-text,
+    .collection-image {
+        width: 100%;
+    }
+
+    /* OBJECTS */
+
+    .objects-list {
+        grid-template-columns: 1fr;
+        gap: 70px;
+    }
+
+    .object-item h3 {
+        margin-top: 20px;
+    }
+
+    /* ABOUT */
+
+    .about {
+        grid-template-columns: 1fr;
+    }
+
+    .about-text {
+        max-width: none;
+    }
+
+    /* FOOTER */
+
+    .footer {
+        padding: 40px var(--pad-x) 25px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+    }
+
+    .footer-nav {
+        flex-wrap: wrap;
+        gap: 12px 26px;
+    }
+
+    /* SCROLL INDICATOR */
+
+    .scroll-indicator {
+        right: 10px;
     }
 
     .scroll-line {
-        width: 1px;
         height: 80px;
     }
 
     .scroll-dot {
-        top: 0;
-        left: 50%;
-
         width: 6px;
         height: 6px;
+    }
+}
 
-        transform: translateX(-50%);
+
+/* =========================
+REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
     }
 
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+    }
+
+    .loading-text span {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .about-wave svg {
+        animation: none;
+    }
 }

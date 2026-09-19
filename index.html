@@ -5,13 +5,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nuée｜fragrance for everyday moments.</title>
+    <meta name="description" content="nuéeは、日々の空間に小さな余白をつくるフレグランスブランド。パフューム、キャンドル、インセンスを通して、香りを暮らしの風景へ。">
+    <meta name="theme-color" content="#F1EEE7">
+
+    <!-- OGP（og:image は公開URLが決まってから、絶対URLで追加してください）
+    <meta property="og:image" content="https://example.com/images/hero-poster.webp">
+    -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ja_JP">
+    <meta property="og:title" content="nuée｜fragrance for everyday moments.">
+    <meta property="og:description" content="nuéeは、日々の空間に小さな余白をつくるフレグランスブランド。">
+
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Shippori+Mincho:wght@400;500&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- 同じタブ内の2回目以降は、ローディング画面を出さない（?loading を付けると強制表示） -->
+    <script>
+        try {
+            if (sessionStorage.getItem("nuee-seen") && !/[?&]loading/.test(location.search)) {
+                document.documentElement.classList.add("is-seen");
+            }
+        } catch (e) { }
+    </script>
+
+    <noscript>
+        <style>
+            .loading-screen { display: none; }
+            .hero, .brand-statement, .collection-item, .objects, .statement, .about, .cta {
+                opacity: 1;
+                transform: none;
+            }
+        </style>
+    </noscript>
 </head>
 
 <body>
 
-    <div class="loading-screen">
+    <div class="loading-screen" aria-hidden="true">
         <p class="loading-text">
             <span>n</span>
             <span>u</span>
@@ -30,13 +68,10 @@
             <a href="#about">ABOUT</a>
         </nav>
 
-        <button class="menu-button">
-            MENU
-        </button>
     </header>
 
     <!-- SCROLL INDICATOR -->
-    <div class="scroll-indicator">
+    <div class="scroll-indicator" aria-hidden="true">
 
         <span class="scroll-number scroll-number-top">01</span>
 
@@ -59,7 +94,8 @@
             </div>
 
             <div class="hero-image">
-                <video src="images/hero2.mp4" autoplay muted loop playsinline></video>
+                <video src="images/hero2.mp4" poster="images/hero-poster.webp" width="810" height="1080" autoplay muted
+                    loop playsinline preload="auto" aria-hidden="true"></video>
             </div>
 
         </section>
@@ -82,7 +118,8 @@
             </div>
 
             <div class="statement-image">
-                <img src="images/brand-statement.png" alt="香りと空間を表現したイメージ">
+                <img src="images/brand-statement.webp" width="1200" height="900" loading="lazy" decoding="async"
+                    alt="香りと空間を表現したイメージ">
             </div>
 
         </section>
@@ -111,7 +148,8 @@
                     </div>
 
                     <div class="collection-image">
-                        <img src="images/still.png" alt="STILL 静かな朝">
+                        <img src="images/still.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                            alt="STILL 静かな朝">
                     </div>
                 </article>
 
@@ -128,7 +166,8 @@
                     </div>
 
                     <div class="collection-image">
-                        <img src="images/dusk.png" alt="DUSK 日が沈んだあとの空気">
+                        <img src="images/dusk.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                            alt="DUSK 日が沈んだあとの空気">
                     </div>
                 </article>
 
@@ -145,7 +184,8 @@
                     </div>
 
                     <div class="collection-image">
-                        <img src="images/mist.png" alt="MIST 雨上がりの庭">
+                        <img src="images/mist.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                            alt="MIST 雨上がりの庭">
                     </div>
                 </article>
 
@@ -160,8 +200,10 @@
                             amber / vanilla / wood
                         </p>
                     </div>
+
                     <div class="collection-image">
-                        <img src="images/warm.png" alt="WARM 午後の光">
+                        <img src="images/warm.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                            alt="WARM 午後の光">
                     </div>
 
                 </article>
@@ -184,7 +226,8 @@
 
                 <article class="object-item">
                     <a href="#">
-                        <img src="images/perfume.png" alt="nuée perfume">
+                        <img src="images/perfume.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                            alt="nuée perfume">
                         <h3>PERFUME</h3>
                         <span>VIEW ALL →</span>
                     </a>
@@ -193,7 +236,8 @@
 
                 <article class="object-item">
                     <a href="#">
-                        <img src="images/candle.png" alt="nuée candle">
+                        <img src="images/candle.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                            alt="nuée candle">
                         <h3>CANDLE</h3>
                         <span>VIEW ALL →</span>
                     </a>
@@ -202,7 +246,8 @@
 
                 <article class="object-item">
                     <a href="#">
-                        <img src="images/incense.png" alt="nuée incense">
+                        <img src="images/incense.webp" width="1003" height="1568" loading="lazy" decoding="async"
+                            alt="nuée incense">
                         <h3>INCENSE</h3>
                         <span>VIEW ALL →</span>
                     </a>
@@ -236,32 +281,34 @@
         <!-- ABOUT -->
         <section class="about" id="about">
 
-            <div class="about-image">
-                <img src="images/about.png" alt="nuéeのブランドイメージ">
-            </div>
-
-            <div class="about-text">
-                <p class="small-title">ABOUT NUÉE</p>
-
-                <h2>fragrance for<br>everyday moments.</h2>
-
-                <p>
-                    香りを、身につけるものから<br>
-                    暮らしの風景へ。<br><br>
-                    nuéeは<BR>
-                    日々の空間に小さな余白をつくる<br>
-                    フレグランスブランドです。
-                </p>
-
-                <a href="#">READ MORE →</a>
-            </div>
-
-            <div class="about-wave">
+            <div class="about-wave" aria-hidden="true">
                 <svg viewBox="0 0 2000 100" preserveAspectRatio="none">
                     <path
                         d="M0,50 C125,0 250,0 375,50 S625,100 750,50 S875,0 1000,50 S1250,100 1375,50 S1625,0 1750,50 S1875,100 2000,50">
                     </path>
                 </svg>
+            </div>
+
+            <div class="about-image">
+                <img src="images/about.webp" width="1024" height="1536" loading="lazy" decoding="async"
+                    alt="nuéeのブランドイメージ">
+            </div>
+
+            <div class="about-text">
+                <p class="small-title">ABOUT NUÉE</p>
+
+                <h2>a little room<br>in every day.</h2>
+
+                <p>
+                    nuéeは、日々の空間に<br>
+                    小さな余白をつくる<br>
+                    フレグランスブランドです。<br><br>
+                    パフューム、キャンドル、インセンス。<br>
+                    香りを通して、ひとつの時間に<br>
+                    静かな輪郭を与えます。
+                </p>
+
+                <a href="#">READ MORE →</a>
             </div>
 
         </section>
