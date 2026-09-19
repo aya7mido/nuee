@@ -914,6 +914,18 @@ MOBILE
     }
 }
 
+@media (max-width: 768px) {
+
+    .about {
+        padding-top: 20px;
+    }
+
+    .about-wave {
+        height: 45px;
+    }
+
+}
+
 
 /* =========================
 REDUCED MOTION
