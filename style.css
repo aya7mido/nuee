@@ -1,31 +1,22 @@
 /* =========================
-TOKENS
+   TOKENS
+   色・余白・ヘッダー高さはここで一括管理する
 ========================= */
 
 :root {
-    /* color */
     --brown: #523E32;
     --cream: #F1EEE7;
+    --serif: Georgia, "Times New Roman", serif;
 
-    /* font */
-    --font-en: "Cormorant Garamond", Georgia, serif;
-    --font-jp: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
-
-    /* layout
-       --pad-x : 画面が広いときは中身を最大 1280px に収め、左右の余白を自動で増やす */
-    --content-max: 1280px;
-    --gutter: clamp(32px, 5.5vw, 80px);
-    --pad-x: max(var(--gutter), calc((100% - var(--content-max)) / 2));
-    --section-y: clamp(100px, 12vw, 180px);
-    --header-h: 80px;
-
-    /* motion */
-    --ease: cubic-bezier(.22, .61, .36, 1);
+    --header-h: 38px;
+    --pad-l: 130px;
+    --pad-r: 130px;
+    --section-y: 160px;
 }
 
 
 /* =========================
-RESET
+   RESET / BASE
 ========================= */
 
 * {
@@ -34,9 +25,16 @@ RESET
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-    scroll-padding-top: var(--header-h);
+body {
+    background-color: var(--cream);
+    color: var(--brown);
+    font-family: var(--serif);
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
 img {
@@ -45,71 +43,14 @@ img {
     height: auto;
 }
 
-::selection {
-    background-color: var(--brown);
-    color: var(--cream);
-}
-
-
-/* =========================
-BASE
-========================= */
-
-body {
-    background-color: var(--cream);
-    color: var(--brown);
-    font-family: var(--font-en), var(--font-jp);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.8;
-    letter-spacing: 0.04em;
-    font-variant-numeric: lining-nums;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-}
-
-
-/* =========================
-LINK
-========================= */
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-/* テキストリンク：ホバーで下線が左から伸びる */
-.nav a,
-.footer-nav a,
-.statement-text a,
-.about-text a,
-.cta a,
-.object-item span {
-    display: inline-block;
-    padding-bottom: 3px;
-    background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
-    transition: background-size 0.5s var(--ease);
-}
-
-.nav a:hover,
-.footer-nav a:hover,
-.statement-text a:hover,
-.about-text a:hover,
-.cta a:hover,
-.object-item a:hover span {
-    background-size: 100% 1px;
-}
-
-/* キーボード操作時のフォーカス */
-a:focus-visible,
-button:focus-visible {
+:focus-visible {
     outline: 1px solid currentColor;
-    outline-offset: 6px;
+    outline-offset: 4px;
 }
 
 
 /* =========================
-LOADING
+   LOADING
 ========================= */
 
 .loading-screen {
@@ -124,7 +65,7 @@ LOADING
     background-color: var(--brown);
     color: var(--cream);
 
-    transition: opacity 1s var(--ease);
+    transition: opacity 1s ease;
 }
 
 .loading-screen.is-hidden {
@@ -132,13 +73,8 @@ LOADING
     pointer-events: none;
 }
 
-/* 同じタブの2回目以降は表示しない */
-.is-seen .loading-screen {
-    display: none;
-}
-
 .loading-screen p {
-    font-size: 28px;
+    font-size: 20px;
     letter-spacing: 0.5em;
 }
 
@@ -147,10 +83,6 @@ LOADING
     opacity: 0;
     transform: translateX(-5px);
     animation: letterAppear 2.4s ease-in-out infinite;
-}
-
-.loading-text span:nth-child(1) {
-    animation-delay: 0s;
 }
 
 .loading-text span:nth-child(2) {
@@ -189,557 +121,194 @@ LOADING
 
 
 /* =========================
-HEADER
+   HEADER
 ========================= */
 
 .header {
+    /* ヒーローの直下に置き、ページ最上部に来たらそこで固定される */
     position: sticky;
     top: 0;
     z-index: 100;
 
+    /* 細いバー。高さは --header-h で一括管理 */
     height: var(--header-h);
-    padding: 0 var(--pad-x);
+    padding: 0 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    background-color: rgba(241, 238, 231, 0.92);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-
-    transition: transform 0.6s var(--ease);
+    background-color: var(--cream);
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* 下にスクロールで隠れ、上にスクロールで戻る */
-.header.is-hidden {
-    transform: translateY(-100%);
+/* PC: ヒーロー(画面いっぱい)の最下部にナビを重ね、半透明で写真を透かす。
+   リンクはヒーローの文字や各セクションと同じ左の線(--pad-l)にそろえる。
+   ロゴは固定されたときだけ、その左の余白に現れる */
+@media (min-width: 769px) {
+    .header {
+        margin-top: calc(var(--header-h) * -1);
+        display: grid;
+        grid-template-columns: calc(var(--pad-l) - 40px) 1fr;
+    }
+
+    .header:not(.is-stuck) {
+        background-color: rgba(241, 238, 231, 0.14);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        color: var(--cream);
+    }
+
+    /* 固定されたら、リンクは右寄せ(ロゴ左・リンク右)。
+       位置が切り替わる瞬間は、ふわっと出し直して跳ねて見えないようにする */
+    .header .nav {
+        animation: navFadeA 0.6s ease;
+    }
+
+    .header.is-stuck .nav {
+        justify-self: end;
+        animation: navFadeB 0.6s ease;
+    }
 }
 
-.header:focus-within {
-    transform: none;
+/* 同じ動きを2つの名前で用意し、状態が変わるたびにアニメーションを再生させる */
+@keyframes navFadeA {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
+@keyframes navFadeB {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* 背景色が違うセクション(COLLECTION / OBJECTS / フッター)の上では半透明にする。
+   後ろが少しぼけて透けるので、文字は読みやすいまま */
+.header.is-translucent {
+    background-color: rgba(241, 238, 231, 0.6);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+/* COLLECTIONの上では、そのセクションと同じベージュの半透明にしてなじませる */
+.header.is-translucent.is-beige {
+    background-color: rgba(221, 208, 190, 0.72);
+}
+
+/* 暗いセクション(OBJECTS / フッター)の上では、半透明のブラウン+クリーム文字にする */
+.header.is-translucent.is-dark {
+    background-color: rgba(82, 62, 50, 0.6);
+    color: var(--cream);
+}
+
+/* スマホでメニューを開いているときは、どこでも通常の配色に戻す。
+   ぼかし(backdrop-filter)が残るとメニューパネルが帯の中に閉じ込められるので外す */
+.header.is-open,
+.header.is-open.is-translucent.is-dark,
+.header.is-open.is-translucent.is-beige {
+    background-color: var(--cream);
+    color: var(--brown);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* アンカーで飛んだとき、固定ナビの裏に見出しが隠れないようにする */
+main > section {
+    scroll-margin-top: var(--header-h);
+}
+
+/* ロゴはヒーローの大きな「nuée」と重ならないよう、固定されてから現れる */
 .logo {
-    font-size: 30px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    line-height: 1;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s;
+}
+
+.header.is-stuck .logo,
+.header.is-open .logo {
+    opacity: 1;
+    visibility: visible;
 }
 
 .nav {
     display: flex;
-    gap: 44px;
+    gap: 36px;
 }
 
 .nav a {
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.14em;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    line-height: 1;
 }
 
+/* ハンバーガーボタン。デスクトップでは隠す(スマホは MOBILE で表示) */
 .menu-button {
+    display: none;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    margin-right: -12px;
+    /* 線の右端をページの余白にそろえる */
     border: none;
     background: none;
     color: inherit;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
     cursor: pointer;
 }
 
-
-/* =========================
-HERO
-========================= */
-
-.hero {
-    min-height: calc(100vh - var(--header-h));
-    min-height: calc(100svh - var(--header-h));
-    padding: 40px var(--pad-x) 100px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 60px;
-    opacity: 0;
-    transition: opacity 2s var(--ease);
-}
-
-.hero.is-visible {
-    opacity: 1;
-}
-
-.hero-text {
-    width: 35%;
-}
-
-.hero-text h1 {
-    font-size: clamp(64px, 9vw, 136px);
-    font-weight: 500;
-    line-height: 0.9;
-    letter-spacing: -0.02em;
-}
-
-.hero-text p {
-    margin-top: 32px;
-    font-size: 18px;
-    line-height: 1.7;
-    letter-spacing: 0.06em;
-}
-
-.hero-image {
-    overflow: hidden;
-}
-
-/* 最初の1画面に、動画（商品）が収まる高さにする */
-.hero-image video {
-    display: block;
-    margin-left: auto;
-    width: auto;
-    height: max(420px, min(calc(100vh - 200px), 760px));
-    height: max(420px, min(calc(100svh - 200px), 760px));
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-}
-
-
-/* =========================
-BRAND STATEMENT
-========================= */
-
-.brand-statement {
-    position: relative;
-    padding: var(--section-y) var(--pad-x);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 80px;
-    opacity: 0;
-    transform: translateY(30px);
-    transition:
-        opacity 1s var(--ease),
-        transform 1s var(--ease);
-}
-
-.brand-statement.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.statement-text {
-    width: 40%;
-}
-
-.statement-text h2 {
-    font-size: clamp(48px, 5.2vw, 76px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: 0;
-}
-
-.statement-text p {
-    margin-top: 40px;
-    font-size: 15px;
-    line-height: 2.1;
-    letter-spacing: 0.08em;
-}
-
-.statement-text a {
-    margin-top: 32px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-}
-
-.statement-image {
-    width: 45%;
-}
-
-.statement-image img {
-    width: 100%;
-}
-
-.statement-line {
+.menu-button-line {
     position: absolute;
-    top: 0;
-    left: 50%;
-    width: 1px;
-    height: 40px;
-    background-color: var(--brown);
-
-    transform: translateX(-50%) scaleY(0);
-    transform-origin: top;
-    transition: transform 1.5s var(--ease);
+    left: 12px;
+    width: 20px;
+    height: 1px;
+    background-color: currentColor;
+    transition: transform 0.4s ease, top 0.4s ease;
 }
 
-.brand-statement.is-visible .statement-line {
-    transform: translateX(-50%) scaleY(1);
+.menu-button-line:nth-child(1) {
+    top: 18px;
 }
 
-
-/* =========================
-SECTION HEADING
-========================= */
-
-.section-heading {
-    margin-bottom: calc(var(--section-y) * 0.55);
+.menu-button-line:nth-child(2) {
+    top: 25px;
 }
 
-.section-heading h2 {
-    font-size: clamp(28px, 3vw, 42px);
-    font-weight: 00;
-    line-height: 1.2;
-    letter-spacing: 0.14em;
+/* 開いているときは × にする */
+.header.is-open .menu-button-line:nth-child(1) {
+    top: 21.5px;
+    transform: rotate(45deg);
 }
 
-.section-heading p {
-    margin-top: 12px;
-    font-size: 17px;
-    font-style: italic;
-    letter-spacing: 0.06em;
+.header.is-open .menu-button-line:nth-child(2) {
+    top: 21.5px;
+    transform: rotate(-45deg);
 }
 
-
-/* =========================
-COLLECTION
-========================= */
-
-.collection {
-    padding: var(--section-y) var(--pad-x) calc(var(--section-y) * 1.4);
-}
-
-.collection-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 60px;
-    margin-bottom: var(--section-y);
-    opacity: 0;
-    transform: translateY(30px);
-    transition:
-        opacity 1s var(--ease),
-        transform 1s var(--ease);
-}
-
-.collection-item.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.collection-item:last-child {
-    margin-bottom: 0;
-}
-
-.collection-text {
-    width: 30%;
-}
-
-.collection-image {
-    width: 46%;
-}
-
-/* 1画面に収まるよう高さを制限（はみ出す分は左右をわずかにトリミング） */
-.collection-image img {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    max-height: 85vh;
-    max-height: 85svh;
-    object-fit: cover;
-}
-
-/* text */
-
-.collection-text .number {
-    font-size: 15px;
-    letter-spacing: 0.12em;
-}
-
-.collection-text h3 {
-    margin-top: 8px;
-    font-size: clamp(34px, 3.4vw, 48px);
-    font-weight: 300;
-    line-height: 1.15;
-    letter-spacing: 0.08em;
-}
-
-.collection-text>p:not(.number):not(.notes) {
-    margin-top: 14px;
-    font-size: 15px;
-    letter-spacing: 0.08em;
-}
-
-.collection-text .notes {
-    margin-top: 28px;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-}
-
-/* デスクトップのみ：左右交互＋画像の幅に緩急をつける */
-@media (min-width: 769px) {
-    .collection-item:nth-child(even) {
-        flex-direction: row-reverse;
-    }
-
-    .collection-item:nth-child(even) .collection-image {
-        width: 38%;
-    }
-}
-
-
-/* =========================
-OBJECTS
-========================= */
-
-.objects {
-    padding: var(--section-y) var(--pad-x);
-    background-color: var(--brown);
-    color: var(--cream);
-    opacity: 0;
-    transition: opacity 1.5s var(--ease);
-}
-
-.objects.is-visible {
-    opacity: 1;
-}
-
-.objects-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-}
-
-.object-item img {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    transition: transform 1s var(--ease);
-}
-
-.object-item a:hover img {
-    transform: scale(1.01);
-}
-
-.object-item h3 {
-    margin-top: 24px;
-    font-size: 17px;
-    font-weight: 400;
-    letter-spacing: 0.14em;
-}
-
-.object-item span {
-    margin-top: 10px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-}
-
-
-/* =========================
-STATEMENT
-========================= */
-
-.statement {
-    padding: var(--section-y) var(--pad-x) calc(var(--section-y) * 0.3);
-    opacity: 0;
-    transform: translateX(-30px);
-    transition:
-        opacity 1s var(--ease),
-        transform 1s var(--ease);
-}
-
-.statement.is-visible {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.statement-jp {
-    font-size: clamp(22px, 2.6vw, 36px);
-    font-weight: 400;
-    line-height: 2;
-    letter-spacing: 0.1em;
-}
-
-.statement-en {
-    margin-top: 40px;
-    font-size: clamp(19px, 1.9vw, 27px);
-    font-style: italic;
-    font-weight: 300;
-    line-height: 1.7;
-    letter-spacing: 0.04em;
-    opacity: 0.85;
-}
-
-.statement-brand {
-    margin-top: 40px;
-    font-size: 15px;
-    letter-spacing: 0.2em;
-}
-
-
-/* =========================
-ABOUT
-========================= */
-
-.about {
-    position: relative;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    column-gap: 100px;
-    row-gap: 60px;
-    padding: calc(var(--section-y) * 0.4) var(--pad-x) var(--section-y);
-    opacity: 0;
-    transition: opacity 1.5s var(--ease);
-}
-
-.about.is-visible {
-    opacity: 1;
-}
-
-.about-image img {
-    width: 100%;
-}
-
-.about-text {
-    max-width: 480px;
-}
-
-.about-text .small-title {
-    margin-bottom: 40px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-}
-
-.about-text h2 {
-    margin-bottom: 40px;
-    font-size: clamp(34px, 3.6vw, 52px);
-    font-weight: 300;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
-}
-
-.about-text p:not(.small-title) {
-    margin-bottom: 40px;
-    font-size: 15px;
-    line-height: 2.1;
-    letter-spacing: 0.08em;
-}
-
-.about-text a {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-}
-
-/* 波線：セクション上部の区切りとして、通常の流れの中に置く（画面幅いっぱいに広げる） */
-.about-wave {
-    grid-column: 1 / -1;
-    order: -1;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    height: 70px;
+/* メニューを開いている間は、後ろのページをスクロールさせない */
+html.is-menu-open {
     overflow: hidden;
 }
 
-.about-wave svg {
-    width: 200%;
-    height: 100%;
-    animation: waveMove 30s linear infinite;
-}
-
-.about-wave path {
-    fill: none;
-    stroke: var(--brown);
-    opacity: 0.5;
-    stroke-width: 2;
-}
-
-@keyframes waveMove {
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(-50%);
-    }
-}
-
-
 /* =========================
-CTA
-========================= */
-
-.cta {
-    padding: var(--section-y) var(--pad-x);
-    text-align: center;
-    opacity: 0;
-    transition: opacity 3s var(--ease);
-}
-
-.cta.is-visible {
-    opacity: 1;
-}
-
-.cta h2 {
-    margin-bottom: 32px;
-    font-size: clamp(32px, 4vw, 56px);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-}
-
-.cta a {
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-}
-
-
-/* =========================
-FOOTER
-========================= */
-
-.footer {
-    padding: 50px var(--pad-x) 30px;
-    background-color: var(--brown);
-    color: var(--cream);
-
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 40px;
-}
-
-.footer-logo {
-    font-size: 34px;
-    line-height: 1.2;
-}
-
-.footer-nav {
-    display: flex;
-    gap: 32px;
-}
-
-.footer-nav a {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-}
-
-.copyright {
-    font-size: 13px;
-    opacity: 0.75;
-}
-
-
-/* =========================
-SCROLL INDICATOR
+   SCROLL INDICATOR
+   色は currentColor で統一。暗い背景の上では .is-light に切り替わる
 ========================= */
 
 .scroll-indicator {
     position: fixed;
-    right: 15px;
+    right: 30px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
@@ -750,24 +319,22 @@ SCROLL INDICATOR
     gap: 10px;
 
     color: var(--brown);
-    transition: color 0.4s var(--ease);
+    transition: color 0.4s ease;
 }
 
-/* 暗い背景のセクション上では明るい色に */
 .scroll-indicator.is-light {
     color: var(--cream);
 }
 
 .scroll-number {
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 10px;
     letter-spacing: 0.05em;
 }
 
 .scroll-line {
     position: relative;
     width: 1px;
-    height: 170px;
+    height: 150px;
     background-color: currentColor;
 }
 
@@ -782,123 +349,607 @@ SCROLL INDICATOR
     background-color: currentColor;
 
     transform: translateX(-50%);
+    transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 
 /* =========================
-MOBILE
+   SHARED
+   セクション共通の余白と見出し
+========================= */
+
+.section {
+    padding: var(--section-y) var(--pad-r) var(--section-y) var(--pad-l);
+}
+
+/* セクション見出し(COLLECTION / OBJECTS)。
+   中の商品名(32px)より一段大きく、「Scent becomes space.」(56px)よりは控えめに。
+   ABOUTの見出し・FIND YOUR SCENT(42px)と同じ格にそろえる */
+.section-heading {
+    margin-bottom: 120px;
+}
+
+.section-heading h2 {
+    font-size: clamp(34px, 3vw, 42px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.06em;
+}
+
+.section-heading p {
+    margin-top: 20px;
+    font-size: 15px;
+    font-style: italic;
+    letter-spacing: 0.03em;
+}
+
+.text-link {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+
+/* =========================
+   HERO
+   画面いっぱいに画像を敷き、左側に文字を重ねる。
+   PCではナビがこの最下部に半透明で重なる
+========================= */
+
+.hero {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    min-height: 480px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    padding: 0 var(--pad-r) 0 var(--pad-l);
+
+    color: var(--cream);
+}
+
+.hero-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    /* 人物(右寄り)が切れにくいよう、トリミングの基準を右に寄せる */
+    object-position: 65% center;
+}
+
+/* 左側だけ少し暗くして、白文字を読みやすくする */
+.hero-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            rgba(82, 62, 50, 0.38) 0%,
+            rgba(82, 62, 50, 0.18) 35%,
+            rgba(82, 62, 50, 0) 60%);
+    pointer-events: none;
+}
+
+.hero-text {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 24px rgba(82, 62, 50, 0.25);
+}
+
+.hero-text h1 {
+    /* 画面が低いときは、高さに合わせて小さくする */
+    font-size: clamp(60px, 8vw, 120px);
+    font-size: clamp(60px, min(8vw, 14svh), 120px);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+}
+
+.hero-text p {
+    margin-top: 30px;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+}
+
+
+/* =========================
+   BRAND STATEMENT
+========================= */
+
+.brand-statement {
+    /* 縦棒の設定。3つの数字は、それぞれ独立して変えられる */
+    --line-h: 140px;
+    /* 棒の長さ */
+    --line-above: 120px;
+    /* 棒の上の余白(ナビの下端から棒の上端まで) */
+    --line-below: 120px;
+    /* 棒の下の余白(棒の下端から、文章と画像の上端まで) */
+    --hero-pb: 0px;
+    /* 直前の要素(今はナビ)の下余白。ナビは余白なしなので 0 */
+
+    position: relative;
+    padding-top: calc(var(--line-above) - var(--hero-pb) + var(--line-h) + var(--line-below));
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+}
+
+.statement-text {
+    width: 40%;
+}
+
+.statement-text h2 {
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.statement-text p {
+    margin-top: 40px;
+    font-size: 14px;
+    line-height: 2;
+}
+
+.statement-text .text-link {
+    margin-top: 40px;
+}
+
+.statement-image {
+    width: 45%;
+}
+
+.statement-line {
+    position: absolute;
+    top: calc(var(--line-above) - var(--hero-pb));
+    left: 50%;
+    width: 0.5px;
+    height: var(--line-h);
+    /* 主張しすぎないよう、ブラウンを薄くして背景になじませる */
+    background-color: rgba(82, 62, 50, 0.28);
+
+    /* 伸び方は script.js がスクロール量に合わせて決める */
+    transform: translateX(-50%) scaleY(0);
+    transform-origin: top;
+    will-change: transform;
+    transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* =========================
+   COLLECTION
+========================= */
+
+.collection {
+    padding-bottom: 250px;
+    --collection-bg: #DDD0BE;
+    background-color: var(--cream);
+    transition: background-color 1.5s ease;
+}
+
+.collection.is-visible {
+    background-color: var(--collection-bg);
+}
+
+.collection-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+    margin-bottom: 180px;
+}
+
+.collection-item:last-child {
+    margin-bottom: 0;
+}
+
+.collection-item:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.collection-text {
+    width: 35%;
+}
+
+@media (min-width: 769px) {
+    .collection-item:nth-child(odd) .collection-text {
+        margin-left: clamp(24px, 5vw, 80px);
+    }
+}
+
+.collection-image {
+    /* ABOUTの画像(540×675)と同じくらいの大きさにそろえる。
+       50%だと高さが740px近くになり、画面の高さとほぼ同じで大きすぎた */
+    width: 46%;
+}
+
+/* 文字の強さ: 名前・英文 > 番号・ノート > 日本語。
+   日本語は小さく・薄くして、英文の流れを邪魔しないようにする */
+.collection-text .number {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.collection-text h3 {
+    margin-top: 10px;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0.03em;
+}
+
+.collection-text .jp {
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+}
+
+.collection-text .tagline {
+    /* 添えるだけの一言。名前より目立たないよう、小さく・少し薄く */
+    margin-top: 28px;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    opacity: 0.75;
+}
+
+.collection-text .notes {
+    margin-top: 28px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.collection-text .desc {
+    margin-top: 14px;
+    font-size: 11px;
+    line-height: 2;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+}
+
+
+/* =========================
+   OBJECTS
+========================= */
+
+.objects {
+    padding-bottom: 180px;
+    background-color: var(--brown);
+    color: var(--cream);
+}
+
+.objects-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.object-item img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+}
+
+.object-item h3 {
+    margin-top: 24px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+}
+
+.object-item .tagline {
+    margin-top: 8px;
+    font-size: 13px;
+    font-style: italic;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    opacity: 0.75;
+}
+
+
+/* =========================
+   ABOUT
+========================= */
+
+.about {
+    position: relative;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 100px;
+    padding-top: 180px;
+    padding-bottom: 180px;
+}
+
+.about-image {
+    position: relative;
+    z-index: 2;
+}
+
+/* 元画像は2:3でPCだと画面より高くなるので、4:5にトリミング。
+   上半分は何もない壁なので、人物と窓辺が残るよう下寄りで切る */
+.about-image img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center 75%;
+}
+
+.about-text {
+    max-width: 480px;
+}
+
+.about-text .small-title {
+    margin-bottom: 40px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+}
+
+.about-text h2 {
+    margin-bottom: 40px;
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.about-text p:not(.small-title) {
+    margin-bottom: 40px;
+    line-height: 2;
+}
+
+/* READ MORE を消したので、最後の段落の下余白は不要 */
+.about-text > :last-child {
+    margin-bottom: 0;
+}
+
+/* 波線: ABOUTとCTAの「境目の線」として、セクションの下端にぴったり置く。
+   余白の真ん中に浮かせず、振れ幅を小さく・線を細くして、
+   ブランドステートメントの縦線(0.5px)と同じ細さの仲間にする */
+.about-wave {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 22px;
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none;
+    /* 波がリンクの上に乗っても、クリックを邪魔しない */
+}
+
+.about-wave svg {
+    display: block;
+    width: 200%;
+    height: 100%;
+    overflow: visible;
+    animation: waveMove 40s linear infinite;
+}
+
+.about-wave path {
+    fill: none;
+    stroke: var(--brown);
+    stroke-width: 0.75;
+    /* 縦につぶしても線の太さが変わらないようにする */
+    vector-effect: non-scaling-stroke;
+    opacity: 0.45;
+}
+
+@keyframes waveMove {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+
+/* =========================
+   CTA
+========================= */
+
+.cta {
+    /* 上は波線(境目)から見出しまで。波線と見出しがひと続きに見える距離にする */
+    padding: 140px var(--pad-r) 180px var(--pad-l);
+    text-align: center;
+}
+
+.cta h2 {
+    font-size: 42px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+/* 締めの一言。見出しに添える程度に、小さく・少し薄く */
+.cta-copy {
+    margin-top: 28px;
+    font-size: 14px;
+    line-height: 2;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    padding: 50px 40px 30px;
+    background-color: var(--brown);
+    color: var(--cream);
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-logo {
+    font-size: 28px;
+    justify-self: start;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 28px;
+}
+
+.footer-nav a {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+}
+
+.copyright {
+    font-size: 9px;
+    opacity: 0.7;
+    justify-self: end;
+}
+
+
+/* =========================
+   REVEAL (スクロールで現れる動き)
+   初期状態と表示状態をここにまとめる。
+   .is-visible は script.js が付け外しする
+========================= */
+
+.hero,
+.objects,
+.about,
+.cta {
+    opacity: 0;
+}
+
+.brand-statement,
+.collection-item {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.hero {
+    transition: opacity 2s ease;
+}
+
+.objects,
+.about {
+    transition: opacity 1.5s ease;
+}
+
+.cta {
+    transition: opacity 3s ease;
+}
+
+.brand-statement,
+.collection-item {
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+/* 必ず上の初期状態より後ろに書く */
+.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+
+/* =========================
+   MOBILE
+   メディアクエリは、ファイルの最後に1つだけ置く
 ========================= */
 
 @media (max-width: 768px) {
 
     :root {
-        --header-h: 70px;
+        --header-h: 52px;
+        --pad-l: 30px;
+        --pad-r: 36px;
+        /* 右側はスクロールインジケーターの分だけ広め */
+        --section-y: 100px;
     }
 
-    /* HEADER */
+    /* スマホ: ナビバーはヒーローの下に置かず、最初から画面上部に固定。
+       ヒーローの上では背景なし・白いハンバーガーだけが右上に見え、
+       ヒーローを過ぎるとクリーム色の帯+ロゴが現れる */
+    .header {
+        position: fixed;
+        left: 0;
+        right: 0;
+        padding: 0 20px;
+        transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    .header:not(.is-stuck):not(.is-open) {
+        background-color: transparent;
+        color: var(--cream);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
 
     .logo {
-        font-size: 28px;
+        font-size: 18px;
     }
 
+    .menu-button {
+        display: block;
+    }
+
+    /* スマホのメニュー: ハンバーガーを押すと画面全体に広がる。
+       z-index: -1 なので、ロゴと×ボタンはパネルの上に残る */
     .nav {
-        display: none;
-    }
+        position: fixed;
+        inset: 0;
+        z-index: -1;
 
-    /* HERO */
-
-    .hero {
-        min-height: auto;
-        padding: 40px var(--pad-x) 80px;
         flex-direction: column;
-        align-items: stretch;
-        gap: 50px;
-    }
-
-    .hero-text {
-        width: 100%;
-    }
-
-    .hero-text h1 {
-        font-size: clamp(64px, 22vw, 100px);
-    }
-
-    .hero-text p {
-        margin-top: 20px;
-        font-size: 17px;
-    }
-
-    .hero-image {
-        width: 100%;
-    }
-
-    .hero-image video {
-        width: 90%;
-        height: auto;
-    }
-
-    /* BRAND STATEMENT */
-
-    .brand-statement {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 60px;
-    }
-
-    .statement-text,
-    .statement-image {
-        width: 100%;
-    }
-
-    /* COLLECTION */
-
-    .collection-item {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 40px;
-    }
-
-    .collection-text,
-    .collection-image {
-        width: 100%;
-    }
-
-    /* OBJECTS */
-
-    .objects-list {
-        grid-template-columns: 1fr;
-        gap: 70px;
-    }
-
-    .object-item h3 {
-        margin-top: 20px;
-    }
-
-    /* ABOUT */
-
-    .about {
-        grid-template-columns: 1fr;
-    }
-
-    .about-text {
-        max-width: none;
-    }
-
-    /* FOOTER */
-
-    .footer {
-        padding: 40px var(--pad-x) 25px;
-        flex-direction: column;
+        justify-content: center;
         align-items: flex-start;
-        gap: 30px;
+        gap: 28px;
+        padding: 0 var(--pad-l);
+
+        background-color: var(--cream);
+
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease, visibility 0.5s;
     }
 
-    .footer-nav {
-        flex-wrap: wrap;
-        gap: 12px 26px;
+    .nav a {
+        font-size: 28px;
+        letter-spacing: 0.06em;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
-    /* SCROLL INDICATOR */
+    .header.is-open .nav {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .header.is-open .nav a {
+        opacity: 1;
+        transform: none;
+    }
+
+    .header.is-open .nav a:nth-child(2) {
+        transition-delay: 0.08s;
+    }
+
+    .header.is-open .nav a:nth-child(3) {
+        transition-delay: 0.16s;
+    }
 
     .scroll-indicator {
         right: 10px;
@@ -912,35 +963,159 @@ MOBILE
         width: 6px;
         height: 6px;
     }
-}
 
-@media (max-width: 768px) {
+    .section-heading {
+        margin-bottom: 60px;
+    }
 
+    .section-heading h2 {
+        font-size: 32px;
+    }
+
+    .section-heading p {
+        margin-top: 14px;
+        font-size: 14px;
+    }
+
+    /* HERO: スマホでも画面いっぱい。縦長画面では人物の顔が入るように寄せる */
+    .hero-image img {
+        object-position: 80% center;
+    }
+
+    .hero-image::after {
+        background: linear-gradient(90deg,
+                rgba(82, 62, 50, 0.45) 0%,
+                rgba(82, 62, 50, 0.15) 70%,
+                rgba(82, 62, 50, 0.05) 100%);
+    }
+
+    .hero-text h1 {
+        font-size: clamp(60px, 20vw, 90px);
+    }
+
+    .hero-text p {
+        margin-top: 20px;
+        font-size: 13px;
+    }
+
+    /* BRAND STATEMENT */
+    .brand-statement {
+        --line-h: 50px;
+        --line-above: 100px;
+        --line-below: 100px;
+        --hero-pb: 0px;
+    }
+
+    .statement-text,
+    .statement-image {
+        width: 100%;
+    }
+
+    .statement-text h2 {
+        font-size: 42px;
+    }
+
+    /* COLLECTION */
+    .collection {
+        padding-bottom: var(--section-y);
+    }
+
+    .collection-item,
+    .collection-item:nth-child(even) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 40px;
+        margin-bottom: 100px;
+    }
+
+    .collection-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .collection-text,
+    .collection-image {
+        width: 100%;
+    }
+
+    .collection-text h3 {
+        font-size: 28px;
+    }
+
+    .collection-text .tagline {
+        margin-top: 22px;
+    }
+
+    /* OBJECTS */
+    .objects {
+        padding-bottom: 100px;
+    }
+
+    .objects-list {
+        grid-template-columns: 1fr;
+        gap: 70px;
+    }
+
+    .object-item h3 {
+        margin-top: 20px;
+    }
+
+    /* ABOUT */
     .about {
-        padding-top: 20px;
+        grid-template-columns: 1fr;
+        gap: 60px;
+        padding-top: 100px;
+        padding-bottom: 100px;
     }
 
+    .about-text {
+        max-width: none;
+    }
+
+    .about-text h2 {
+        font-size: 36px;
+    }
+
+    /* 波線はスマホでは出さない(PCだけのアクセント) */
     .about-wave {
-        height: 45px;
+        display: none;
     }
 
+    /* CTA */
+    .cta {
+        padding-top: 90px;
+        padding-bottom: 120px;
+    }
+
+    .cta h2 {
+        font-size: 32px;
+    }
+
+    /* FOOTER */
+    .footer {
+        padding: 40px 20px 25px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+        display: flex;
+    }
+
+    .footer-nav {
+        flex-wrap: wrap;
+        gap: 15px 25px;
+    }
 }
 
 
 /* =========================
-REDUCED MOTION
+   REDUCED MOTION
+   動きを減らす設定の人には、動きをかけない
 ========================= */
 
 @media (prefers-reduced-motion: reduce) {
 
-    html {
-        scroll-behavior: auto;
-    }
-
-    *,
-    *::before,
-    *::after {
-        transition-duration: 0.01ms !important;
+    .header .nav,
+    .header.is-stuck .nav {
+        animation: none;
     }
 
     .loading-text span {
@@ -951,5 +1126,26 @@ REDUCED MOTION
 
     .about-wave svg {
         animation: none;
+    }
+
+    .header,
+    .menu-button-line,
+    .logo,
+    .nav,
+    .nav a,
+    .hero,
+    .objects,
+    .about,
+    .cta,
+    .brand-statement,
+    .collection-item,
+    .statement-line,
+    .object-item img {
+        transition: none;
+    }
+
+    .brand-statement,
+    .collection-item {
+        transform: none;
     }
 }

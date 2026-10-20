@@ -1,142 +1,137 @@
 (() => {
-    const root = document.documentElement;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const pad2 = (n) => String(n).padStart(2, "0");
 
     const loadingScreen = document.querySelector(".loading-screen");
     const hero = document.querySelector(".hero");
-    const heroVideo = document.querySelector(".hero-image video");
 
     /* =========================
-       HERO VIDEO（動きを減らす設定のときは止める）
+       ローディング → ヒーローを表示
     ========================= */
 
-    if (reduceMotion && heroVideo) {
-        heroVideo.removeAttribute("autoplay");
-        heroVideo.pause();
-    }
-
-
-    /* =========================
-       LOADING
-       ・最低 1.5 秒は見せる
-       ・フォントとヒーローのポスター画像が読めたら開く（最大 5 秒で必ず開く）
-       ・同じタブの 2 回目以降は表示しない
-    ========================= */
-
-    const MIN_WAIT = 1500;
-    const MAX_WAIT = 5000;
-
-    const showSite = () => {
-        loadingScreen.classList.add("is-hidden");
-        hero.classList.add("is-visible");
-        try {
-            sessionStorage.setItem("nuee-seen", "1");
-        } catch (e) { }
+    const finishLoading = () => {
+        setTimeout(() => {
+            loadingScreen.classList.add("is-hidden");
+            hero.classList.add("is-visible");
+        }, 1500);
     };
 
-    if (root.classList.contains("is-seen")) {
-        hero.classList.add("is-visible");
+    if (document.readyState === "complete") {
+        finishLoading();
     } else {
-        const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-        const posterReady = new Promise((resolve) => {
-            if (!heroVideo || !heroVideo.poster) return resolve();
-            const img = new Image();
-            img.onload = img.onerror = resolve;
-            img.src = heroVideo.poster;
-        });
-
-        // window の load 後（＝フォントの読み込みが始まった後）に fonts.ready を待つ
-        const fontsReady = new Promise((resolve) => {
-            const afterLoad = () => (document.fonts ? document.fonts.ready : Promise.resolve()).then(resolve, resolve);
-            if (document.readyState === "complete") afterLoad();
-            else window.addEventListener("load", afterLoad, { once: true });
-        });
-
-        Promise.race([
-            Promise.all([posterReady, fontsReady, wait(MIN_WAIT)]),
-            wait(MAX_WAIT)
-        ]).then(showSite);
+        window.addEventListener("load", finishLoading);
     }
 
 
     /* =========================
-       REVEAL（一度だけ表示）
+       スクロールで現れる動き
+       画面に入ると is-visible を付け、出ると外す(何度でも再生される)
     ========================= */
 
-    const revealTargets = document.querySelectorAll(
-        ".brand-statement, .collection-item, .statement, .objects, .about, .cta"
-    );
+    const reveal = (selector, rootMargin) => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                entry.target.classList.toggle("is-visible", entry.isIntersecting);
+            });
+            // COLLECTIONの色が変わったときなどに、ナビの色も合わせ直す
+            if (typeof onScroll === "function") onScroll();
+        }, { rootMargin });
 
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-        });
-    }, {
-        rootMargin: "0px 0px -8% 0px"
-    });
+        document.querySelectorAll(selector).forEach((el) => observer.observe(el));
+    };
 
-    revealTargets.forEach((target) => revealObserver.observe(target));
+    reveal(".collection-item, .brand-statement, .objects, .cta, .collection", "0px 0px 20% 0px");
+    reveal(".about", "0px");
 
 
     /* =========================
-       SCROLL（ヘッダー・インジケーター・セクション番号）
-       scroll イベントは 1 つにまとめ、requestAnimationFrame で間引く
+       スクロールインジケーター
+       ・点の位置 = ページ全体の進み具合
+       ・上の数字 = 画面の中央にあるセクション
+       ・暗い背景(ヒーロー画像 / OBJECTS / フッター)の上では色を反転
     ========================= */
 
-    const header = document.querySelector(".header");
     const indicator = document.querySelector(".scroll-indicator");
-    const scrollLine = document.querySelector(".scroll-line");
-    const scrollDot = document.querySelector(".scroll-dot");
-    const numberTop = document.querySelector(".scroll-number-top");
-    const numberBottom = document.querySelector(".scroll-number-bottom");
-    const objectsSection = document.querySelector(".objects");
-    const sections = document.querySelectorAll("main > section");
+    const line = indicator.querySelector(".scroll-line");
+    const dot = indicator.querySelector(".scroll-dot");
+    const numberTop = indicator.querySelector(".scroll-number-top");
+    const numberBottom = indicator.querySelector(".scroll-number-bottom");
 
-    numberBottom.textContent = pad2(sections.length);
+    // ヒーローは main の外(ナビより上)にあるので、別に足して数える
+    const sections = document.querySelectorAll(".hero, main > section");
+    // ヒーロー画像の上でも色を反転させる
+    const darkAreas = document.querySelectorAll(".hero, .objects, .footer");
 
-    let lineTravel = 0;
-    const measure = () => {
-        lineTravel = scrollLine.clientHeight - scrollDot.offsetHeight;
+    const pad = (n) => String(n).padStart(2, "0");
+
+    // 下の数字は、セクションの数に合わせて自動で決める
+    numberBottom.textContent = pad(sections.length);
+
+    const coversCenter = (el, center) => {
+        const rect = el.getBoundingClientRect();
+        return rect.top <= center && rect.bottom >= center;
     };
 
-    let lastY = window.scrollY;
-    let lastSection = 0;
-    let lastLight = null;
-    let ticking = false;
+// 縦棒: 画面の下から現れて、スクロールに合わせて上から下へ伸びる
+const statementLine = document.querySelector(".statement-line");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const updateStatementLine = () => {
+    let progress = 1;
+
+    if (!reduceMotion) {
+        const vh = window.innerHeight;
+        const top = statementLine.getBoundingClientRect().top;
+        const start = vh * 0.85;   // 棒の上端が画面の下から15%に来たら伸び始める
+        const end = vh * 0.35;     // 上から35%の位置まで来たら伸び切る
+        progress = Math.min(1, Math.max(0, (start - top) / (start - end)));
+    }
+
+    statementLine.style.transform = `translateX(-50%) scaleY(${progress})`;
+};
+
+    /* ナビの状態
+       ・is-stuck      : PC=ナビが最上部に固定された / スマホ=ヒーローを過ぎた(ロゴと背景が現れる)
+       ・is-translucent: ナビの真下が、背景色の違うセクション */
+    const header = document.querySelector(".header");
+    const mobileQuery = window.matchMedia("(max-width: 768px)");
+    const tintedAreas = document.querySelectorAll(".collection, .objects, .footer");
+
+    const updateHeader = () => {
+        const headerH = header.offsetHeight;
+
+        const stuck = mobileQuery.matches
+            ? hero.getBoundingClientRect().bottom <= headerH
+            : header.getBoundingClientRect().top <= 0.5;
+        header.classList.toggle("is-stuck", stuck);
+
+        // ナビの下端のすぐ下にあるセクションで判定する
+        // COLLECTION は色が付いているとき(is-visible)だけ
+        const probe = headerH + 1;
+        const under = stuck && Array.from(tintedAreas).find((el) => {
+            if (el.classList.contains("collection") && !el.classList.contains("is-visible")) return false;
+            const rect = el.getBoundingClientRect();
+            return rect.top <= probe && rect.bottom >= probe;
+        });
+        header.classList.toggle("is-translucent", Boolean(under));
+        // COLLECTIONの上ではベージュ、暗いセクションの上ではブラウンの半透明に切り替える
+        const onCollection = Boolean(under) && under.classList.contains("collection");
+        header.classList.toggle("is-beige", onCollection);
+        header.classList.toggle("is-dark", Boolean(under) && !onCollection);
+    };
 
     const update = () => {
-        ticking = false;
+        const center = window.innerHeight / 2;
+        updateHeader();
+        updateStatementLine();
 
-        const y = window.scrollY;
-        const vh = window.innerHeight;
-        const center = vh / 2;
+        // 点の位置: 線の長さから点の大きさを引いた分だけ動く
+        const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const progress = Math.min(1, Math.max(0, window.scrollY / scrollable));
+        const travel = line.clientHeight - dot.offsetHeight;
+        dot.style.transform = `translateX(-50%) translateY(${progress * travel}px)`;
 
-        // ヘッダー：下へスクロールで隠し、上へスクロールで出す
-        const delta = y - lastY;
-        if (y <= header.offsetHeight) {
-            header.classList.remove("is-hidden");
-            lastY = y;
-        } else if (Math.abs(delta) > 6) {
-            header.classList.toggle("is-hidden", delta > 0);
-            lastY = y;
-        }
-
-        // 進捗ドット
-        const maxScroll = root.scrollHeight - vh;
-        const progress = maxScroll > 0 ? Math.min(Math.max(y / maxScroll, 0), 1) : 0;
-        scrollDot.style.transform = `translateX(-50%) translateY(${progress * lineTravel}px)`;
-
-        // OBJECTS（暗い背景）の上では明るい色に
-        const objectsRect = objectsSection.getBoundingClientRect();
-        const light = objectsRect.top <= center && objectsRect.bottom >= center;
-        if (light !== lastLight) {
-            indicator.classList.toggle("is-light", light);
-            lastLight = light;
-        }
+        // 色の反転
+        const onDark = Array.from(darkAreas).some((el) => coversCenter(el, center));
+        indicator.classList.toggle("is-light", onDark);
 
         // 現在のセクション番号
         let current = 1;
@@ -145,24 +140,56 @@
                 current = index + 1;
             }
         });
-        if (current !== lastSection) {
-            numberTop.textContent = pad2(current);
-            lastSection = current;
-        }
+        numberTop.textContent = pad(current);
     };
 
-    const requestUpdate = () => {
+    // スクロール中は、1フレームに1回だけ計算する
+    let ticking = false;
+    const onScroll = () => {
         if (ticking) return;
         ticking = true;
-        requestAnimationFrame(update);
+        requestAnimationFrame(() => {
+            update();
+            ticking = false;
+        });
     };
 
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", () => {
-        measure();
-        requestUpdate();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+
+
+    /* =========================
+       スマホメニューの開閉
+       ハンバーガー ⇄ ×。リンクを押す / Esc / PC幅に戻すと閉じる
+    ========================= */
+
+    const menuButton = header.querySelector(".menu-button");
+    const navLinks = header.querySelectorAll(".nav a");
+
+    const setMenu = (open) => {
+        header.classList.toggle("is-open", open);
+        document.documentElement.classList.toggle("is-menu-open", open);
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute("aria-label", open ? "メニューを閉じる" : "メニューを開く");
+    };
+
+    menuButton.addEventListener("click", () => {
+        setMenu(!header.classList.contains("is-open"));
     });
 
-    measure();
-    update();
+    navLinks.forEach((link) => link.addEventListener("click", () => setMenu(false)));
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && header.classList.contains("is-open")) {
+            setMenu(false);
+            menuButton.focus();
+        }
+    });
+
+    mobileQuery.addEventListener("change", (e) => {
+        if (!e.matches) setMenu(false);
+        update();
+    });
+
 })();

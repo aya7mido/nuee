@@ -5,55 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nuée｜fragrance for everyday moments.</title>
-    <meta name="description" content="nuéeは、日々の空間に小さな余白をつくるフレグランスブランド。パフューム、キャンドル、インセンスを通して、香りを暮らしの風景へ。">
-    <meta name="theme-color" content="#F1EEE7">
-
-    <!-- OGP（og:image は公開URLが決まってから、絶対URLで追加してください）
-    <meta property="og:image" content="https://example.com/images/hero-poster.webp">
-    -->
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="ja_JP">
-    <meta property="og:title" content="nuée｜fragrance for everyday moments.">
-    <meta property="og:description" content="nuéeは、日々の空間に小さな余白をつくるフレグランスブランド。">
-
-    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-
-    <!-- FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Shippori+Mincho:wght@400;500&display=swap"
-        rel="stylesheet">
+    <meta name="description" content="nuéeは、日々の空間に小さな余白をつくるフレグランスブランドです。">
 
     <link rel="stylesheet" href="style.css">
-
-    <!-- 同じタブ内の2回目以降は、ローディング画面を出さない（?loading を付けると強制表示） -->
-    <script>
-        try {
-            if (sessionStorage.getItem("nuee-seen") && !/[?&]loading/.test(location.search)) {
-                document.documentElement.classList.add("is-seen");
-            }
-        } catch (e) { }
-    </script>
-
-    <noscript>
-        <style>
-            .loading-screen {
-                display: none;
-            }
-
-            .hero,
-            .brand-statement,
-            .collection-item,
-            .objects,
-            .statement,
-            .about,
-            .cta {
-                opacity: 1;
-                transform: none;
-            }
-        </style>
-    </noscript>
 </head>
 
 <body>
@@ -67,21 +21,40 @@
         </p>
     </div>
 
-    <!-- HEADER -->
+    <!-- 1. HERO(画面いっぱい。ナビはこの直下に来る) -->
+    <section class="hero">
+
+        <div class="hero-image">
+            <img src="images/newhero.webp" width="1672" height="941" fetchpriority="high" decoding="async"
+                alt="">
+        </div>
+
+        <div class="hero-text">
+            <h1>nuée</h1>
+            <p>fragrance for<br>everyday moments.</p>
+        </div>
+
+    </section>
+
+    <!-- HEADER(ヒーローの下に置き、最上部まで来たら固定する) -->
     <header class="header">
         <a href="#" class="logo">nuée</a>
 
-        <nav class="nav">
+        <nav class="nav" id="global-nav" aria-label="メイン">
             <a href="#collection">COLLECTION</a>
             <a href="#objects">OBJECTS</a>
             <a href="#about">ABOUT</a>
         </nav>
 
+        <button class="menu-button" type="button" aria-controls="global-nav" aria-expanded="false"
+            aria-label="メニューを開く">
+            <span class="menu-button-line"></span>
+            <span class="menu-button-line"></span>
+        </button>
     </header>
 
-    <!-- SCROLL INDICATOR -->
+    <!-- SCROLL INDICATOR(数字と点の位置は script.js が更新する) -->
     <div class="scroll-indicator" aria-hidden="true">
-
         <span class="scroll-number scroll-number-top">01</span>
 
         <div class="scroll-line">
@@ -89,29 +62,12 @@
         </div>
 
         <span class="scroll-number scroll-number-bottom">07</span>
-
     </div>
 
     <main>
 
-        <!-- HERO -->
-        <section class="hero">
-
-            <div class="hero-text">
-                <h1>nuée</h1>
-                <p>fragrance for<br>everyday moments.</p>
-            </div>
-
-            <div class="hero-image">
-                <video src="images/hero2.mp4" poster="images/hero-poster.webp" width="810" height="1080" autoplay muted
-                    loop playsinline preload="auto" aria-hidden="true"></video>
-            </div>
-
-        </section>
-
-
-        <!-- BRAND STATEMENT -->
-        <section class="brand-statement">
+        <!-- 2. BRAND STATEMENT -->
+        <section class="brand-statement section">
 
             <div class="statement-line"></div>
 
@@ -123,98 +79,101 @@
                     部屋や時間、記憶の一部になる。
                 </p>
 
-                <a href="#about">ABOUT →</a>
+                <a href="#about" class="text-link">ABOUT →</a>
             </div>
 
             <div class="statement-image">
-                <img src="images/brand-statement.webp" width="1200" height="900" loading="lazy" decoding="async"
+                <img src="images/brand-statement.png" width="1448" height="1086" loading="lazy" decoding="async"
                     alt="香りと空間を表現したイメージ">
             </div>
 
         </section>
 
 
-        <!-- COLLECTION -->
-        <section class="collection" id="collection">
+        <!-- 3. COLLECTION -->
+        <section class="collection section" id="collection">
 
             <div class="section-heading">
                 <h2>COLLECTION</h2>
                 <p>four scents, four moments.</p>
             </div>
 
-
             <div class="collection-list">
 
-                <!-- STILL -->
                 <article class="collection-item still">
                     <div class="collection-text">
-                        <p class="number">01</p>
+                        <p class="number">01 / STILL</p>
                         <h3>STILL</h3>
-                        <p>静かな朝</p>
-                        <p class="notes">
-                            bergamot / linen / sandalwood
-                        </p>
+                        <p class="jp">静かな朝</p>
+
+                        <p class="tagline">A slower kind of morning.</p>
+
+                        <p class="notes">bergamot / linen / sandalwood</p>
+
+                        <p class="desc">朝の静けさと、洗いたてのリネンを思わせる、澄んだ香り</p>
                     </div>
 
                     <div class="collection-image">
-                        <img src="images/still.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                        <img src="images/still.png" width="1122" height="1402" loading="lazy" decoding="async"
                             alt="STILL 静かな朝">
                     </div>
                 </article>
 
-
-                <!-- DUSK -->
                 <article class="collection-item dusk">
                     <div class="collection-text">
-                        <p class="number">02</p>
+                        <p class="number">02 / DUSK</p>
                         <h3>DUSK</h3>
-                        <p>日が沈んだあとの空気</p>
-                        <p class="notes">
-                            fig / black tea / wood
-                        </p>
+                        <p class="jp">日が沈んだあとの空気</p>
+
+                        <p class="tagline">Where the day grows quiet.</p>
+
+                        <p class="notes">fig / black tea / wood</p>
+
+                        <p class="desc">熟した果実と紅茶の余韻が、静かな夜へと溶けていく</p>
                     </div>
 
                     <div class="collection-image">
-                        <img src="images/dusk.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                        <img src="images/dusk.png" width="1122" height="1402" loading="lazy" decoding="async"
                             alt="DUSK 日が沈んだあとの空気">
                     </div>
                 </article>
 
-
-                <!-- MIST -->
                 <article class="collection-item mist">
                     <div class="collection-text">
-                        <p class="number">03</p>
+                        <p class="number">03 / MIST</p>
                         <h3>MIST</h3>
-                        <p>雨上がりの庭</p>
-                        <p class="notes">
-                            neroli / green / musk
-                        </p>
+                        <p class="jp">雨上がりの庭</p>
+
+                        <p class="tagline">The garden, just after rain.</p>
+
+                        <p class="notes">neroli / green / musk</p>
+
+                        <p class="desc">濡れた葉の青さと、花に残る雨粒のような透明感</p>
                     </div>
 
                     <div class="collection-image">
-                        <img src="images/mist.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                        <img src="images/mist.png" width="1122" height="1402" loading="lazy" decoding="async"
                             alt="MIST 雨上がりの庭">
                     </div>
                 </article>
 
-
-                <!-- WARM -->
                 <article class="collection-item warm">
                     <div class="collection-text">
-                        <p class="number">04</p>
+                        <p class="number">04 / WARM</p>
                         <h3>WARM</h3>
-                        <p>午後の光</p>
-                        <p class="notes">
-                            amber / vanilla / wood
-                        </p>
+                        <p class="jp">午後の光</p>
+
+                        <p class="tagline">Held in the afternoon light.</p>
+
+                        <p class="notes">amber / vanilla / wood</p>
+
+                        <p class="desc">やわらかな陽だまりと、肌に残るぬくもりを思わせる香り</p>
                     </div>
 
                     <div class="collection-image">
-                        <img src="images/warm.webp" width="1122" height="1402" loading="lazy" decoding="async"
+                        <img src="images/warm.png" width="1122" height="1402" loading="lazy" decoding="async"
                             alt="WARM 午後の光">
                     </div>
-
                 </article>
 
             </div>
@@ -222,44 +181,35 @@
         </section>
 
 
-        <!-- OBJECTS -->
-        <section class="objects" id="objects">
+        <!-- 4. OBJECTS -->
+        <section class="objects section" id="objects">
 
             <div class="section-heading">
                 <h2>OBJECTS</h2>
                 <p>things to scent your everyday.</p>
             </div>
 
-
             <div class="objects-list">
 
                 <article class="object-item">
-                    <a href="#">
-                        <img src="images/perfume.webp" width="1122" height="1402" loading="lazy" decoding="async"
-                            alt="nuée perfume">
-                        <h3>PERFUME</h3>
-                        <span>VIEW ALL →</span>
-                    </a>
+                    <img src="images/perfume.png" width="1122" height="1402" loading="lazy" decoding="async"
+                        alt="nuée perfume">
+                    <h3>01 / PERFUME</h3>
+                    <p class="tagline">A scent that stays with you.</p>
                 </article>
 
-
                 <article class="object-item">
-                    <a href="#">
-                        <img src="images/candle.webp" width="1122" height="1402" loading="lazy" decoding="async"
-                            alt="nuée candle">
-                        <h3>CANDLE</h3>
-                        <span>VIEW ALL →</span>
-                    </a>
+                    <img src="images/candle.png" width="1122" height="1402" loading="lazy" decoding="async"
+                        alt="nuée candle">
+                    <h3>02 / CANDLE</h3>
+                    <p class="tagline">Light, warmth, and quiet moments.</p>
                 </article>
 
-
                 <article class="object-item">
-                    <a href="#">
-                        <img src="images/incense.webp" width="1003" height="1568" loading="lazy" decoding="async"
-                            alt="nuée incense">
-                        <h3>INCENSE</h3>
-                        <span>VIEW ALL →</span>
-                    </a>
+                    <img src="images/incense.png" width="1003" height="1568" loading="lazy" decoding="async"
+                        alt="nuée incense">
+                    <h3>03 / INCENSE</h3>
+                    <p class="tagline">Let the moment drift away.</p>
                 </article>
 
             </div>
@@ -267,68 +217,48 @@
         </section>
 
 
-        <!-- STATEMENT -->
-        <section class="statement">
-
-            <p class="statement-jp">
-                香りは、身につけるものから<br>
-                暮らしの風景へ。
-            </p>
-
-            <p class="statement-en">
-                Some scents stay with you.<br>
-                Some stay in the room.
-            </p>
-
-            <p class="statement-brand">
-                — nuée
-            </p>
-
-        </section>
-
-
-        <!-- ABOUT -->
-        <section class="about" id="about">
-
-            <div class="about-wave" aria-hidden="true">
-                <svg viewBox="0 0 2000 100" preserveAspectRatio="none">
-                    <path
-                        d="M0,50 C125,25 250,25 375,50 S625,75 750,50 S875,25 1000,50 S1250,75 1375,50 S1625,25 1750,50 S1875,75 2000,50">
-                    </path>
-                </svg>
-            </div>
+        <!-- 5. ABOUT -->
+        <section class="about section" id="about">
 
             <div class="about-image">
-                <img src="images/about.webp" width="1024" height="1536" loading="lazy" decoding="async"
+                <img src="images/about.png" width="1024" height="1536" loading="lazy" decoding="async"
                     alt="nuéeのブランドイメージ">
             </div>
 
             <div class="about-text">
                 <p class="small-title">ABOUT NUÉE</p>
 
-                <h2>a little room<br>in every day.</h2>
+                <h2>fragrance for<br>everyday moments.</h2>
 
                 <p>
-                    nuéeは、日々の空間に<br>
-                    小さな余白をつくる<br>
-                    フレグランスブランドです。<br><br>
-                    パフューム、キャンドル、インセンス。<br>
-                    香りを通して、ひとつの時間に<br>
-                    静かな輪郭を与えます。
+                    香りを、身につけるものから<br>
+                    暮らしの風景へ。<br><br>
+                    nuéeは<br>
+                    日々の空間に小さな余白をつくる<br>
+                    フレグランスブランドです。
                 </p>
+            </div>
 
-                <a href="#">READ MORE →</a>
+            <div class="about-wave" aria-hidden="true">
+                <svg viewBox="0 0 2000 100" preserveAspectRatio="none">
+                    <path
+                        d="M0,50 C125,0 250,0 375,50 S625,100 750,50 S875,0 1000,50 S1250,100 1375,50 S1625,0 1750,50 S1875,100 2000,50">
+                    </path>
+                </svg>
             </div>
 
         </section>
 
 
-        <!-- CTA -->
+        <!-- 6. CTA -->
         <section class="cta">
 
             <h2>FIND YOUR SCENT</h2>
 
-            <a href="#">Explore all fragrances →</a>
+            <p class="cta-copy">
+                Some scents stay with you.<br>
+                Some stay in the room.
+            </p>
 
         </section>
 
@@ -339,18 +269,13 @@
     <footer class="footer">
 
         <a href="#" class="footer-logo">nuée</a>
-
-        <nav class="footer-nav">
+        <nav class="footer-nav" aria-label="フッター">
             <a href="#collection">COLLECTION</a>
             <a href="#objects">OBJECTS</a>
             <a href="#about">ABOUT</a>
-            <a href="#">CONTACT</a>
-            <a href="#">INSTAGRAM</a>
         </nav>
 
-        <p class="copyright">
-            © nuée. All rights reserved.
-        </p>
+        <p class="copyright">© nuée. All rights reserved.</p>
 
     </footer>
 
